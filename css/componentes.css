@@ -698,7 +698,7 @@ html:has(.masthead){--nav-h:58px;}
 .store-view .categories{padding-block:clamp(1.75rem,3.5vw,2.5rem) clamp(1.5rem,3vw,2.25rem);}
 .cat-list{
   list-style:none;margin:clamp(1.1rem,2vw,1.5rem) 0 0;padding:.4rem 0 0;
-  display:flex;flex-wrap:wrap;justify-content:center;gap:1.25rem clamp(2rem,5.5vw,4.25rem);
+  display:flex;flex-wrap:wrap;justify-content:center;gap:1.25rem clamp(3rem,8vw,6.5rem);
 }
 .cat-list li{flex:0 0 104px;}
 .cat-item{display:flex;flex-direction:column;align-items:center;gap:.65rem;width:100%;text-align:center;}
@@ -720,7 +720,7 @@ html:has(.masthead){--nav-h:58px;}
 .cat-item[aria-pressed="true"] .cat-name{color:var(--rose-deep);}
 @media (max-width:640px){
   /* En celular, fila deslizable */
-  .cat-list{flex-wrap:nowrap;justify-content:flex-start;gap:1.35rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.5rem .6rem .75rem;scroll-padding-inline:.6rem;scrollbar-width:none;}
+  .cat-list{flex-wrap:nowrap;justify-content:flex-start;gap:2rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.5rem .6rem .75rem;scroll-padding-inline:.6rem;scrollbar-width:none;}
   .cat-list::-webkit-scrollbar{display:none;}
   .cat-list li{flex:0 0 72px;scroll-snap-align:start;}
   .cat-circle{width:72px;}
