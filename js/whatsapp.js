@@ -11,8 +11,8 @@
 
   const waLink = (text) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 
+  window.SB.WHATSAPP_NUMBER = WHATSAPP_NUMBER;   // lo usa js/carrito.js para enviar el pedido
   window.SB.waLink = waLink;
-  window.SB.waProductLink = (p) => waLink("Hola Street Blush! Me interesa: " + p.name + " (" + window.SB.money(p.price) + ")");
 
   const general = waLink(GENERAL_MSG);
   document.querySelectorAll("[data-wa]").forEach(el => el.setAttribute("href", general));

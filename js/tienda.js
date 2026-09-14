@@ -35,6 +35,13 @@
     document.getElementById("favChip").setAttribute("aria-pressed", String(favOnly));
   }
 
+  // Categoría que viaja al carrito: "Ropa" en la tienda de hombre (el carrito pide talla),
+  // o la categoría del maquillaje (Labios, Rubores…)
+  function categoriaCarrito(p, catInfo){
+    if (tienda.tipo === "ropa") return "Ropa";
+    return catInfo ? catInfo.nombre : tienda.categoria;
+  }
+
   // enDrop: la tarjeta va dentro de la sección New drop, donde la etiqueta sobra
   function cardHTML(p, i, animate, enDrop){
     const fav = favs.has(p.id);
@@ -54,10 +61,11 @@
           <p class="desc">${p.desc}</p>
           <div class="card-foot">
             <span class="price">${SB.money(p.price)}</span>
-            <a class="buy-btn" href="${SB.waProductLink(p)}" target="_blank" rel="noopener" aria-label="Comprar ${p.name} por WhatsApp">
+            <button class="buy-btn btn-agregar" type="button" aria-label="Agregar ${p.name} a la bolsa"
+              data-nombre="${p.name}" data-precio="${p.price}" data-categoria="${categoriaCarrito(p, catInfo)}" data-talla="${p.talla || ""}">
               ${SB.WA_ICON}
               <span class="text-rise-marquee" aria-hidden="true"><span class="rise-track"><span class="rise-row">Comprar</span><span class="rise-row rise-dup">Comprar</span></span></span>
-            </a>
+            </button>
           </div>
         </div>
       </article>`;
@@ -184,9 +192,7 @@
       setTimeout(() => searchInput.focus({preventScroll:true}), 450);
     });
   }
-  document.getElementById("navBagBtn").addEventListener("click", () => {
-    SB.scrollToEl(document.getElementById("contacto"));
-  });
+  // La bolsa del header la maneja js/carrito.js
 
   searchInput.placeholder = tienda.busqueda;
   renderCategories();
