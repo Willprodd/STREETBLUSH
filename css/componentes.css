@@ -787,3 +787,77 @@ html.js-anim .reveal.is-in{opacity:1;transform:none;}
 /* El botón flotante de WhatsApp entra con un pequeño rebote */
 @keyframes floatIn{from{opacity:0;transform:scale(.6) translateY(12px);}to{opacity:1;transform:none;}}
 .tienda-mujer .float-wa{animation:floatIn .6s cubic-bezier(.34,1.56,.64,1) .5s both;}
+
+/* =====================================================================
+   PULIDO PROFESIONAL — compartido por hombre/ y mujer/.
+   Tarjetas más finas, secciones sin zonas muertas y controles discretos.
+   ===================================================================== */
+
+/* Tarjetas: fondo con luz suave, icono más pequeño y sin borde */
+.card-art{
+  isolation:isolate;border:none;border-radius:18px;
+  background:radial-gradient(90% 70% at 50% 20%,var(--cream) 0%,var(--tile) 75%);
+}
+.card-art::before{
+  content:"";position:absolute;z-index:-1;width:48%;aspect-ratio:1;border-radius:50%;
+  background:rgba(var(--rose-rgb),.09);transition:transform .6s var(--ease-out),background .3s;
+}
+.card:hover .card-art{background:radial-gradient(90% 70% at 50% 20%,var(--cream) 0%,var(--blush) 80%);}
+.card:hover .card-art::before{transform:scale(1.12);background:rgba(var(--rose-rgb),.14);}
+.card-art > svg{width:30%;height:30%;color:var(--rose-deep);}
+.card-cat{border-radius:999px;padding:.34rem .7rem;letter-spacing:.1em;}
+.fav-toggle{border-color:transparent;box-shadow:0 6px 16px -8px rgba(var(--ink-rgb),.3);}
+.card-body{gap:.25rem;}
+.card-kicker{font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.card-body h3{letter-spacing:-.005em;}
+.card-body .desc{text-wrap:pretty;}
+.card-foot{padding-top:1rem;border-top:1px solid var(--line);margin-top:auto;}
+.card-body .desc{margin-bottom:.35rem;}
+
+/* New drop en negro: la misma luz, en tonos oscuros */
+.new-drop .card-art{background:radial-gradient(90% 70% at 50% 20%,#2e2729 0%,#1d1a1b 80%);}
+.new-drop .card:hover .card-art{background:radial-gradient(90% 70% at 50% 20%,#3a2a31 0%,#221d1f 80%);}
+.new-drop .card-art::before{background:rgba(var(--rose-rgb),.16);}
+.new-drop .card-art > svg{color:var(--blush);}
+.new-drop .card-kicker{color:rgba(var(--cream-rgb),.55);}
+.new-drop .card-foot{border-top-color:var(--ink-line);}
+.new-drop .fav-toggle{box-shadow:none;}
+/* Solo hay pocos productos en el drop: texto y tarjetas centrados entre sí, sin hueco debajo */
+@media (min-width:881px){
+  .new-drop-inner{align-items:center;}
+  .new-drop-head{position:static;}
+}
+.new-drop .label{letter-spacing:.2em;}
+
+/* Catálogo en 3 columnas: 6 productos quedan en 2 filas completas */
+@media (min-width:900px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .tienda-mujer .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.75rem,3vw,2.5rem) clamp(1rem,2vw,1.5rem);}
+  .shop .card-art{aspect-ratio:5/4;}
+  .drop-grid .card-art{aspect-ratio:1;}
+}
+.shop-head{padding-bottom:clamp(1.25rem,2.5vw,1.75rem);border-bottom:1px solid var(--line);}
+.result-count{align-self:flex-end;padding:.4rem .85rem;border-radius:999px;background:var(--paper-2);color:var(--ink-soft);}
+@media (max-width:640px){.result-count{align-self:flex-start;}}
+
+/* Carrusel: las flechas solo aparecen al pasar el mouse, para no tapar la tipografía del banner */
+@media (hover:hover) and (pointer:fine){
+  .carousel .carousel-btn{opacity:0;scale:.9;transition:opacity .3s,scale .3s var(--ease-out),background .25s;}
+  .carousel:hover .carousel-btn,.carousel:focus-within .carousel-btn{opacity:1;scale:1;}
+}
+.carousel-btn{width:40px;height:40px;background:rgba(var(--cream-rgb),.82);color:var(--ink);box-shadow:0 8px 20px -10px rgba(var(--ink-rgb),.45);}
+.carousel-btn:hover{background:var(--cream);}
+
+/* Cambiar de tienda y editorial: más aire y jerarquía */
+.switch-card{box-shadow:0 24px 50px -36px rgba(var(--ink-rgb),.6);}
+.feature{border-top-width:1px;border-top-color:var(--tile-line);}
+.feature-head svg{padding:.45rem;width:36px;height:36px;border-radius:50%;background:var(--cream);box-shadow:0 0 0 1px var(--line);}
+
+/* CTA final: el brillo rosa un poco más presente */
+.cta-banner::before{background:radial-gradient(55% 90% at 50% 125%,rgba(var(--rose-rgb),.45),transparent 70%);}
+.cta-banner h2{letter-spacing:-.02em;}
+
+/* Pie: espacio para que el botón flotante de WhatsApp no tape el texto */
+.foot-bottom{padding-bottom:calc(1.5rem + 64px);}
+@media (min-width:641px){.foot-bottom{padding-bottom:1.5rem;padding-right:calc(clamp(1rem,4vw,2.5rem) + 72px);}}
+.foot-col h2{color:var(--muted);}

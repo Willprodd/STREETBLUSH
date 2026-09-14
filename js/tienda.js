@@ -35,18 +35,21 @@
     document.getElementById("favChip").setAttribute("aria-pressed", String(favOnly));
   }
 
-  function cardHTML(p, i, animate){
+  // enDrop: la tarjeta va dentro de la sección New drop, donde la etiqueta sobra
+  function cardHTML(p, i, animate, enDrop){
     const fav = favs.has(p.id);
+    const catInfo = p.cat && categorias.find(c => c.id === p.cat);
     return `
       <article class="card${animate ? " card-enter" : ""}" style="--i:${i}">
         <div class="card-art">
-          <span class="card-cat${p.drop ? " is-drop" : ""}">${p.drop ? etiquetaDrop : tienda.categoria}</span>
+          ${p.drop && !enDrop ? `<span class="card-cat is-drop">${etiquetaDrop}</span>` : ""}
           <button class="fav-toggle" type="button" data-fav="${p.id}" aria-pressed="${fav}" aria-label="${fav ? "Quitar de favoritos" : "Guardar en favoritos"}: ${p.name}">
             <svg viewBox="0 0 24 24" fill="${fav ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2" aria-hidden="true">${SB.HEART}</svg>
           </button>
           ${SB.ICONS[p.icon]}
         </div>
         <div class="card-body">
+          <p class="card-kicker">${catInfo ? catInfo.nombre : tienda.categoria}</p>
           <h3>${p.name}</h3>
           <p class="desc">${p.desc}</p>
           <div class="card-foot">
@@ -114,7 +117,7 @@
   }
 
   function renderNewDrop(animate){
-    newDropGrid.innerHTML = products.filter(p => p.drop).map((p, i) => cardHTML(p, i, animate)).join("");
+    newDropGrid.innerHTML = products.filter(p => p.drop).map((p, i) => cardHTML(p, i, animate, true)).join("");
     attachCardHandlers(newDropGrid);
   }
 
