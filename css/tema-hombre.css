@@ -1,0 +1,30 @@
+/* =====================================================================
+   TEMA HOMBRE — solo colores. Se carga después de global.css y
+   componentes.css, así que cualquier variable que cambies aquí pinta
+   toda la tienda de hombre (botones, tarjetas, degradados, sombras…).
+   Por ahora repite la paleta actual: cámbiala a tu gusto.
+   Si cambias un color, actualiza también su versión -rgb.
+   ===================================================================== */
+:root{
+  --paper:#faf7f5;
+  --paper-2:#f1eae8;
+  --tile:#efe7e6;
+  --tile-line:#e2d6d4;
+  --ink:#141212;
+  --ink-soft:#2a2626;
+  --ink-light:#352c2d;
+  --ink-line:#3a2e30;
+  --ink-hover:#3a2430;
+  --muted:#5b5253;
+  --line:#e4dad8;
+  --rose:#d63a73;         /* color de acento */
+  --rose-deep:#a6265a;
+  --rose-light:#e24f88;
+  --blush:#f5d9e4;
+  --cream:#fffaf8;
+  --ink-rgb:20,18,18;
+  --rose-rgb:214,58,115;
+  --rose-deep-rgb:166,38,90;
+  --paper-rgb:250,247,245;
+  --cream-rgb:255,250,248;
+}

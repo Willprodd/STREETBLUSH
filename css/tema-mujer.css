@@ -1,0 +1,35 @@
+/* =====================================================================
+   TEMA MUJER (MAQUILLAJE) — solo colores. Se carga después de global.css
+   y componentes.css, así que cualquier variable que cambies aquí pinta
+   toda la tienda de maquillaje.
+   Por ahora repite la paleta actual: cámbiala a tu gusto.
+   Si cambias un color, actualiza también su versión -rgb.
+   ===================================================================== */
+:root{
+  /* Fondos con un rosa muy suave, para diferenciarla de la tienda de hombre */
+  --paper:#fdf8fa;
+  --paper-2:#f8ecf1;
+  --tile:#f6e9ef;
+  --tile-line:#eed9e3;
+  --ink:#141212;
+  --ink-soft:#2a2626;
+  --ink-light:#352c2d;
+  --ink-line:#3a2e30;
+  --ink-hover:#3a2430;
+  --muted:#6b5b62;
+  --line:#eedfe6;
+  --rose:#d63a73;         /* color de acento */
+  --rose-deep:#a6265a;
+  --rose-light:#e24f88;
+  --blush:#f7dde8;
+  --cream:#fffbfc;
+  --ink-rgb:20,18,18;
+  --rose-rgb:214,58,115;
+  --rose-deep-rgb:166,38,90;
+  --paper-rgb:253,248,250;
+  --cream-rgb:255,251,252;
+
+  /* Franja superior ("Pedidos coordinados por WhatsApp…") */
+  --utility-bg:#f7dde8;   /* rosado claro */
+  --utility-fg:#a6265a;   /* texto rosa oscuro (contraste 5.1:1) */
+}
