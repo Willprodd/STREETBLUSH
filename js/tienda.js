@@ -7,12 +7,53 @@
   "use strict";
 
   const SB = window.SB;
+  const esc = SB.esc;
   const tienda = window.SB_TIENDA;
-  const products = tienda.productos;
   const favs = SB.favoritos;
 
   const categorias = tienda.categorias || [];
   const etiquetaDrop = tienda.etiquetaDrop || "New drop";
+  const esRopa = tienda.tipo === "ropa";
+  const products = normalizarProductos(tienda.productos || []);
+
+  /* Revisa y completa los datos de js/data/productos-*.js, para que un producto
+     nuevo con campos vacíos no rompa la página. Los errores salen en la consola. */
+  function normalizarProductos(lista){
+    const ids = new Set();
+    return lista.filter((p, i) => {
+      const faltan = ["id", "name", "price"].filter(k => p[k] === undefined || p[k] === "");
+      if (faltan.length){
+        console.warn(`[Street Blush] El producto #${i + 1} no tiene ${faltan.join(", ")} y no se muestra.`, p);
+        return false;
+      }
+      if (ids.has(p.id)){
+        console.warn(`[Street Blush] El id "${p.id}" está repetido: solo se muestra el primero.`);
+        return false;
+      }
+      if (p.cat && !categorias.some(c => c.id === p.cat)){
+        console.warn(`[Street Blush] "${p.name}" usa la categoría "${p.cat}", que no existe en categorias.`);
+      }
+      ids.add(p.id);
+      return true;
+    }).map(p => {
+      const catInfo = p.cat ? categorias.find(c => c.id === p.cat) : null;
+      const categoriaNombre = catInfo ? catInfo.nombre : tienda.categoria;
+      return {
+        ...p,
+        id: String(p.id),
+        price: Number(p.price),
+        desc: p.desc || "",
+        detalle: p.detalle || "",
+        caracteristicas: Array.isArray(p.caracteristicas) ? p.caracteristicas : [],
+        imgs: (Array.isArray(p.imgs) && p.imgs.length ? p.imgs : [p.img]).filter(Boolean),
+        icon: SB.ICONS[p.icon] ? p.icon : (esRopa ? "hoodie" : "lipstick"),
+        categoriaNombre,
+        // "Ropa" hace que el carrito pida talla; en maquillaje viaja la categoría (Labios, Rubores…)
+        categoriaCarrito: esRopa ? "Ropa" : categoriaNombre,
+        tallas: esRopa ? (p.talla ? [p.talla] : (p.tallas || tienda.tallas || [])) : []
+      };
+    });
+  }
 
   let favOnly = false;
   let query = "";
@@ -35,37 +76,45 @@
     document.getElementById("favChip").setAttribute("aria-pressed", String(favOnly));
   }
 
-  // Categoría que viaja al carrito: "Ropa" en la tienda de hombre (el carrito pide talla),
-  // o la categoría del maquillaje (Labios, Rubores…)
-  function categoriaCarrito(p, catInfo){
-    if (tienda.tipo === "ropa") return "Ropa";
-    return catInfo ? catInfo.nombre : tienda.categoria;
+  // Imagen principal del producto, o su icono mientras no tenga foto
+  function mediaHTML(p, clase){
+    return p.imgs.length
+      ? `<img class="${clase}" src="${esc(p.imgs[0])}" alt="" loading="lazy" decoding="async">`
+      : SB.ICONS[p.icon];
   }
 
-  // enDrop: la tarjeta va dentro de la sección New drop, donde la etiqueta sobra
+  // Botón que agrega directo al carrito (lo escucha js/carrito.js)
+  function agregarBtnHTML(p){
+    const texto = `Agregar<span class="buy-extra"> al carrito</span>`;
+    return `
+      <button class="buy-btn btn-agregar" type="button" aria-label="Agregar ${esc(p.name)} al carrito"
+        data-nombre="${esc(p.name)}" data-precio="${p.price}" data-categoria="${esc(p.categoriaCarrito)}"
+        data-talla="${esc(p.tallas.length === 1 ? p.tallas[0] : "")}" data-tallas="${esc(p.tallas.join("|"))}">
+        ${SB.BAG_ADD}
+        <span class="text-rise-marquee" aria-hidden="true"><span class="rise-track"><span class="rise-row">${texto}</span><span class="rise-row rise-dup">${texto}</span></span></span>
+      </button>`;
+  }
+
+  // enDrop: la tarjeta va dentro de la sección New drop, donde la etiqueta sobra.
+  // El nombre es un enlace que cubre la tarjeta y abre la vista del producto (js/producto.js).
   function cardHTML(p, i, animate, enDrop){
     const fav = favs.has(p.id);
-    const catInfo = p.cat && categorias.find(c => c.id === p.cat);
     return `
-      <article class="card${animate ? " card-enter" : ""}" style="--i:${i}">
-        <div class="card-art">
-          ${p.drop && !enDrop ? `<span class="card-cat is-drop">${etiquetaDrop}</span>` : ""}
-          <button class="fav-toggle" type="button" data-fav="${p.id}" aria-pressed="${fav}" aria-label="${fav ? "Quitar de favoritos" : "Guardar en favoritos"}: ${p.name}">
+      <article class="card${animate ? " card-enter" : ""}" style="--i:${i}" data-producto="${esc(p.id)}">
+        <div class="card-art${p.imgs.length ? " has-img" : ""}">
+          ${p.drop && !enDrop ? `<span class="card-cat is-drop">${esc(etiquetaDrop)}</span>` : ""}
+          <button class="fav-toggle" type="button" data-fav="${esc(p.id)}" aria-pressed="${fav}" aria-label="${fav ? "Quitar de favoritos" : "Guardar en favoritos"}: ${esc(p.name)}">
             <svg viewBox="0 0 24 24" fill="${fav ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2" aria-hidden="true">${SB.HEART}</svg>
           </button>
-          ${SB.ICONS[p.icon]}
+          ${mediaHTML(p, "card-img")}
         </div>
         <div class="card-body">
-          <p class="card-kicker">${catInfo ? catInfo.nombre : tienda.categoria}</p>
-          <h3>${p.name}</h3>
-          <p class="desc">${p.desc}</p>
+          <p class="card-kicker">${esc(p.categoriaNombre)}</p>
+          <h3><a class="card-open" href="#producto/${encodeURIComponent(p.id)}">${esc(p.name)}</a></h3>
+          <p class="desc">${esc(p.desc)}</p>
           <div class="card-foot">
             <span class="price">${SB.money(p.price)}</span>
-            <button class="buy-btn btn-agregar" type="button" aria-label="Agregar ${p.name} a la bolsa"
-              data-nombre="${p.name}" data-precio="${p.price}" data-categoria="${categoriaCarrito(p, catInfo)}" data-talla="${p.talla || ""}">
-              ${SB.WA_ICON}
-              <span class="text-rise-marquee" aria-hidden="true"><span class="rise-track"><span class="rise-row">Comprar</span><span class="rise-row rise-dup">Comprar</span></span></span>
-            </button>
+            ${agregarBtnHTML(p)}
           </div>
         </div>
       </article>`;
@@ -106,7 +155,7 @@
     if (cat) items = items.filter(p => p.cat === cat);
     if (favOnly) items = items.filter(p => favs.has(p.id));
     const q = query.trim().toLowerCase();
-    if (q) items = items.filter(p => (p.name + " " + p.desc).toLowerCase().includes(q));
+    if (q) items = items.filter(p => [p.name, p.desc, p.categoriaNombre, p.detalle].join(" ").toLowerCase().includes(q));
     const catInfo = cat && categorias.find(c => c.id === cat);
     resultCount.textContent = (items.length === 1 ? "1 producto" : `${items.length} productos`) + (catInfo ? ` en ${catInfo.nombre}` : "");
 
@@ -193,6 +242,15 @@
     });
   }
   // La bolsa del header la maneja js/carrito.js
+
+  // Para la vista de producto (js/producto.js)
+  SB.catalogo = {
+    productos: products,
+    etiquetaDrop,
+    buscar: (id) => products.find(p => p.id === id),
+    mediaHTML,
+    refrescar(){ updateFavUI(); renderGrid(false); renderNewDrop(false); }
+  };
 
   searchInput.placeholder = tienda.busqueda;
   renderCategories();

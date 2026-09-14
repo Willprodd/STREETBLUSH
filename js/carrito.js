@@ -40,15 +40,20 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
   /* ---------- Lógica del carrito ---------- */
-  function agregarAlCarrito(nombre, precio, categoria, talla){
+  // cantidad y tallas son opcionales: la vista de producto manda la cantidad elegida,
+  // y tallas guarda las opciones del producto para el selector de la bolsa
+  function agregarAlCarrito(nombre, precio, categoria, talla, cantidad = 1, tallas = []){
+    cantidad = Math.max(1, parseInt(cantidad, 10) || 1);
     if (!nombre || !Number.isFinite(precio)) return;
-    const nueva = {nombre, precio, cantidad:1, categoria: categoria || "", talla: talla || ""};
+    const nueva = {nombre, precio, cantidad, categoria: categoria || "", talla: talla || ""};
+    if (tallas.length) nueva.tallas = tallas;
     const existente = carrito.find(l => mismaLinea(l, nueva));
-    if (existente) existente.cantidad += 1;
+    if (existente) existente.cantidad += cantidad;
     else carrito.push(nueva);
     persistir();
     renderCarrito();
-    mostrarToast(nombre);
+    animarContador();
+    mostrarToast(cantidad > 1 ? `${cantidad} × ${nombre}` : nombre);
   }
 
   function cambiarCantidad(i, delta){
@@ -195,6 +200,7 @@
 
   function abrirCarrito(){
     if (panel.classList.contains("open")) return;
+    if (SB.vistaProducto) SB.vistaProducto.cerrar(false);   // la bolsa reemplaza a la vista de producto
     ultimoFoco = document.activeElement;
     if (SB.closeDrawer) SB.closeDrawer(false);
     if (paso === "enviado" && carrito.length === 0) paso = "items";
@@ -249,7 +255,7 @@
       body.innerHTML = `
         <div class="cart-empty">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 8h12l1 12H5Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
-          <p>Tu bolsa está vacía. Toca “Comprar” en un producto para agregarlo.</p>
+          <p>Tu bolsa está vacía. Toca “Agregar” en un producto para sumarlo a tu pedido.</p>
         </div>`;
       foot.innerHTML = `<button class="btn btn-solid" type="button" data-cart="seguir">Ver catálogo</button>`;
       return;
@@ -288,14 +294,15 @@
   }
 
   function tallaHTML(l, i){
+    const opciones = Array.isArray(l.tallas) && l.tallas.length ? l.tallas : TALLAS_ROPA;
     // Productos de talla única (ej. gorras) llegan con la talla ya puesta
-    if (l.talla && !TALLAS_ROPA.includes(l.talla)) return `<span class="cart-size-fixed">Talla ${esc(l.talla)}</span>`;
+    if (opciones.length === 1 || (l.talla && !opciones.includes(l.talla))) return `<span class="cart-size-fixed">Talla ${esc(l.talla || opciones[0])}</span>`;
     return `
       <label class="cart-size">
         <span class="sr-only">Talla de ${esc(l.nombre)}</span>
         <select data-cart="talla" data-i="${i}" aria-describedby="cartTallaError${i}">
           <option value=""${l.talla ? "" : " selected"}>Talla</option>
-          ${TALLAS_ROPA.map(t => `<option value="${t}"${t === l.talla ? " selected" : ""}>${t}</option>`).join("")}
+          ${opciones.map(t => `<option value="${esc(t)}"${t === l.talla ? " selected" : ""}>${esc(t)}</option>`).join("")}
         </select>
       </label>`;
   }
@@ -391,6 +398,12 @@
   document.body.appendChild(toast);
   let toastTimer = null;
 
+  function animarContador(){
+    contador.classList.remove("bump");
+    void contador.offsetWidth;   // reinicia la animación si se agrega varias veces seguidas
+    contador.classList.add("bump");
+  }
+
   function mostrarToast(nombre){
     toast.querySelector(".cart-toast-text").textContent = `Agregaste ${nombre} a tu bolsa`;
     toast.classList.add("show");
@@ -412,7 +425,8 @@
     const precio = parseInt(btn.dataset.precio, 10);
     const categoria = btn.dataset.categoria || "";
     const talla = btn.dataset.talla || "";
-    agregarAlCarrito(nombre, precio, categoria, talla);
+    const tallas = btn.dataset.tallas ? btn.dataset.tallas.split("|") : [];
+    agregarAlCarrito(nombre, precio, categoria, talla, 1, tallas);
   });
 
   if (bagBtn){

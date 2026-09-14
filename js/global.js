@@ -12,6 +12,8 @@
     reduceMotion,
     wait: (ms) => new Promise(resolve => setTimeout(resolve, reduceMotion.matches ? 0 : ms)),
     money: (n) => "$" + n.toLocaleString("es-CO") + " COP",
+    // Escapa texto antes de meterlo en HTML (nombres, descripciones y rutas de los productos)
+    esc: (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),
     scrollToEl: (el) => el.scrollIntoView({behavior: reduceMotion.matches ? "auto" : "smooth"}),
     ICONS: {
       lipstick:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="9" y="2.5" width="6" height="4.5" rx="1"/><path d="M9.5 7h5l1.2 12.5a1.3 1.3 0 0 1-1.3 1.5h-4.8a1.3 1.3 0 0 1-1.3-1.5Z"/><path d="M9.7 10.5h4.6"/></svg>`,
@@ -28,6 +30,7 @@
       vest:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M9 3 6 5v15h5l1-9 1 9h5V5l-3-2-2 2h-2Z"/><path d="M12 3v17"/></svg>`
     },
     WA_ICON: `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20Zm4.4-5.9c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1s-.7.8-.9 1-.3.2-.6.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.2-.4.6-1.2.1-.2 0-.4 0-.5L8.9 8.4c-.2-.4-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3A3 3 0 0 0 6 10.5c0 1.8 1.3 3.5 1.5 3.7s2.6 4 6.3 5.2c2.6.9 2.6.6 3 .5.6-.1 1.5-.6 1.7-1.2s.2-1.1.2-1.2-.2-.2-.4-.3Z"/></svg>`,
+    BAG_ADD: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8h12l1 12H5Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><path d="M12 11.5v5M9.5 14h5"/></svg>`,
     HEART: `<path d="M12 21s-7-4.3-9.5-8.8C.7 8.6 2 5 5.5 4.3 8 3.8 10 5 12 7.5 14 5 16 3.8 18.5 4.3 22 5 23.3 8.6 21.5 12.2 19 16.7 12 21 12 21Z"/>`,
     closeDrawer: () => {}
   };
