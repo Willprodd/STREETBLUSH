@@ -80,6 +80,23 @@ p{margin:0;}
 .utility{background:var(--utility-bg,var(--ink));color:var(--utility-fg,var(--blush));text-align:center;padding:.6rem 1rem;}
 .utility p{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
 
+/* Franja superior animada: texto corriendo sobre una cinta ondulada (js/text-loop.js) */
+.text-loop{
+  --loop-ribbon:30px;                                   /* grosor de la cinta */
+  --loop-ribbon-color:var(--loop-color,var(--rose-deep));
+  --loop-text-color:var(--cream);
+  position:relative;height:64px;padding:0;overflow:hidden;
+}
+.text-loop:not(.is-ready){display:grid;place-items:center;}
+.text-loop-svg{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.text-loop-ribbon{stroke:var(--loop-ribbon-color);stroke-linecap:round;stroke-linejoin:round;}
+.text-loop-text{fill:var(--loop-text-color);font-family:var(--font-body);font-size:12.5px;font-weight:800;letter-spacing:1.6px;}
+.text-loop-measure{opacity:0;}
+@media (max-width:560px){.text-loop{height:56px;--loop-ribbon:26px;}.text-loop-text{font-size:11px;}}
+/* Cinta plana (data-shape="line"): ocupa toda la franja */
+.text-loop[data-shape="line"]{height:40px;--loop-ribbon:40px;}
+@media (max-width:560px){.text-loop[data-shape="line"]{height:36px;--loop-ribbon:36px;}}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;animation-delay:0s !important;transition-duration:.01ms !important;scroll-behavior:auto !important;}
 }

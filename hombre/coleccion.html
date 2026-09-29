@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Colección · Street Blush Hombre</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Todo el streetwear de Street Blush: camisetas, jeans, cargos, hoodies, chaquetas y gorras. Pedidos por WhatsApp y envíos a toda Colombia.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='%23141212'/%3E%3Ctext%20x='32'%20y='42'%20text-anchor='middle'%20font-family='Arial%20Black,Arial,sans-serif'%20font-weight='900'%20font-size='27'%20fill='%23d63a73'%3ESB%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../css/global.css?v=20260928c">
+<link rel="stylesheet" href="../css/componentes.css?v=20260928c">
+<link rel="stylesheet" href="../css/tema-hombre.css?v=20260928c">
+</head>
+<body class="tienda tienda-hombre" data-popup="no">
+
+<div class="store-view">
+  <script src="../js/data/productos-hombre.js?v=20260928c"></script>
+  <script src="../js/hombre-shell.js?v=20260928c" data-parte="cabecera"></script>
+
+  <main id="main">
+    <!-- El título, los filtros y los productos se arman con js/hombre.js según la dirección:
+         coleccion.html?c=camisetas&s=oversize · ?c=novedades · ?q=jean · ?fav=1 -->
+    <section class="hb-col" id="hbColeccion" tabindex="-1" aria-labelledby="colTitulo">
+      <div class="wrap">
+        <nav aria-label="Ruta"><ol class="hb-crumbs" data-col-migas></ol></nav>
+        <h1 class="hb-col-title" id="colTitulo" data-col-titulo>Todo el streetwear</h1>
+        <p class="hb-col-intro" data-col-intro hidden></p>
+        <div class="hb-chips hb-col-chips" data-col-chips hidden></div>
+        <div class="hb-col-bar">
+          <p class="hb-col-count" data-col-count aria-live="polite"></p>
+          <label class="hb-sort">
+            <span>Ordenar</span>
+            <select data-col-orden>
+              <option value="destacados">Destacados</option>
+              <option value="precio-asc">Precio: menor a mayor</option>
+              <option value="precio-desc">Precio: mayor a menor</option>
+              <option value="nombre">Nombre: A–Z</option>
+            </select>
+          </label>
+        </div>
+        <div class="hb-grid" data-col-grid></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/hombre-shell.js?v=20260928c" data-parte="pie"></script>
+</div>
+
+<script src="../js/global.js?v=20260928c"></script>
+<script src="../js/whatsapp.js?v=20260914c"></script>
+<script src="../js/text-loop.js?v=20260915b"></script>
+<script src="../js/favoritos.js?v=20260914c"></script>
+<script src="../js/hombre.js?v=20260928c"></script>
+<script src="../js/carrito.js?v=20260928c"></script>
+<script src="../js/producto.js?v=20260928c"></script>
+</body>
+</html>

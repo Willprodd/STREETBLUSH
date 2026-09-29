@@ -83,16 +83,53 @@
       : SB.ICONS[p.icon];
   }
 
-  // Botón que agrega directo al carrito (lo escucha js/carrito.js)
+  // Datos que lee js/carrito.js al agregar (nombre, precio, talla, foto o icono)
+  const datosCarrito = (p) => `data-nombre="${esc(p.name)}" data-precio="${p.price}" data-categoria="${esc(p.categoriaCarrito)}"
+        data-talla="${esc(p.tallas.length === 1 ? p.tallas[0] : "")}" data-tallas="${esc(p.tallas.join("|"))}"
+        data-img="${esc(p.imgs[0] || "")}" data-icon="${esc(p.icon)}"`;
+
+  const enCarrito = (p) => (SB.carrito ? SB.carrito.cantidadDe(p.name) : 0);
+
+  // Sin unidades en la bolsa: botón "Agregar". Con unidades: selector − cantidad +
   function agregarBtnHTML(p){
+    const n = enCarrito(p);
+    if (n > 0){
+      return `
+        <div class="card-qty" role="group" aria-label="${esc(p.name)} en el carrito">
+          <button class="card-qty-btn" type="button" data-card-qty="menos" data-nombre="${esc(p.name)}" aria-label="Quitar una unidad de ${esc(p.name)}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14"/></svg>
+          </button>
+          <output aria-live="polite">${n}<span class="sr-only"> en el carrito</span></output>
+          <button class="card-qty-btn btn-agregar" type="button" data-card-qty="mas" aria-label="Agregar otra unidad de ${esc(p.name)}"
+            ${datosCarrito(p)}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>`;
+    }
     const texto = `Agregar<span class="buy-extra"> al carrito</span>`;
     return `
-      <button class="buy-btn btn-agregar" type="button" aria-label="Agregar ${esc(p.name)} al carrito"
-        data-nombre="${esc(p.name)}" data-precio="${p.price}" data-categoria="${esc(p.categoriaCarrito)}"
-        data-talla="${esc(p.tallas.length === 1 ? p.tallas[0] : "")}" data-tallas="${esc(p.tallas.join("|"))}">
+      <button class="buy-btn btn-agregar" type="button" data-card-qty="mas" aria-label="Agregar ${esc(p.name)} al carrito"
+        ${datosCarrito(p)}>
         ${SB.BAG_ADD}
         <span class="text-rise-marquee" aria-hidden="true"><span class="rise-track"><span class="rise-row">${texto}</span><span class="rise-row rise-dup">${texto}</span></span></span>
       </button>`;
+  }
+
+  // Cuando cambia la bolsa, cada tarjeta actualiza su botón sin volver a pintar el catálogo
+  function actualizarBotonesCarrito(){
+    document.querySelectorAll(".card[data-producto] .card-buy").forEach(caja => {
+      const p = products.find(x => x.id === caja.closest(".card").dataset.producto);
+      if (!p) return;
+      const n = String(enCarrito(p));
+      if (caja.dataset.qty === n) return;
+      const foco = caja.contains(document.activeElement) ? document.activeElement.dataset.cardQty : null;
+      caja.dataset.qty = n;
+      caja.innerHTML = agregarBtnHTML(p);
+      if (foco){
+        const destino = caja.querySelector(`[data-card-qty="${foco}"]`) || caja.querySelector("[data-card-qty]");
+        if (destino) destino.focus({preventScroll:true});
+      }
+    });
   }
 
   // enDrop: la tarjeta va dentro de la sección New drop, donde la etiqueta sobra.
@@ -114,7 +151,7 @@
           <p class="desc">${esc(p.desc)}</p>
           <div class="card-foot">
             <span class="price">${SB.money(p.price)}</span>
-            ${agregarBtnHTML(p)}
+            <div class="card-buy" data-qty="${enCarrito(p)}">${agregarBtnHTML(p)}</div>
           </div>
         </div>
       </article>`;
@@ -242,6 +279,11 @@
     });
   }
   // La bolsa del header la maneja js/carrito.js
+  document.addEventListener("sb:carrito", actualizarBotonesCarrito);
+  document.addEventListener("click", (e) => {
+    const menos = e.target.closest('[data-card-qty="menos"]');
+    if (menos && SB.carrito) SB.carrito.quitarUno(menos.dataset.nombre);
+  });
 
   // Para la vista de producto (js/producto.js)
   SB.catalogo = {

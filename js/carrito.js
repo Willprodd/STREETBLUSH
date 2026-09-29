@@ -5,7 +5,8 @@
    de una tienda a otra.
 
    - Los botones .btn-agregar / .btn-pedir de las tarjetas agregan el
-     producto (leen data-nombre, data-precio, data-categoria, data-talla).
+     producto (leen data-nombre, data-precio, data-categoria, data-talla,
+     data-img, data-icon).
    - La bolsa del header (#navBagBtn) abre el panel del carrito.
    - El panel tiene 3 pasos: productos → datos del cliente → enviado.
    ===================================================================== */
@@ -19,7 +20,7 @@
   const TALLAS_ROPA = ["S", "M", "L", "XL", "XXL"];
 
   /* ---------- Estado ---------- */
-  // Cada línea: {nombre, precio, cantidad, categoria, talla}
+  // Cada línea: {nombre, precio, cantidad, categoria, talla, img, icon}
   let carrito = leer(KEY_CARRITO, []).filter(esLineaValida);
   let cliente = Object.assign({nombre:"", telefono:"", direccion:"", ciudad:"", notas:""}, leer(KEY_CLIENTE, {}));
   let paso = "items";           // "items" | "datos" | "enviado"
@@ -41,14 +42,21 @@
 
   /* ---------- Lógica del carrito ---------- */
   // cantidad y tallas son opcionales: la vista de producto manda la cantidad elegida,
-  // y tallas guarda las opciones del producto para el selector de la bolsa
-  function agregarAlCarrito(nombre, precio, categoria, talla, cantidad = 1, tallas = []){
+  // y tallas guarda las opciones del producto para el selector de la bolsa.
+  // media = {img, icon}: la foto o el icono que se ve en la bolsa
+  function agregarAlCarrito(nombre, precio, categoria, talla, cantidad = 1, tallas = [], media = {}){
     cantidad = Math.max(1, parseInt(cantidad, 10) || 1);
     if (!nombre || !Number.isFinite(precio)) return;
     const nueva = {nombre, precio, cantidad, categoria: categoria || "", talla: talla || ""};
     if (tallas.length) nueva.tallas = tallas;
+    if (media.img) nueva.img = media.img;
+    if (media.icon) nueva.icon = media.icon;
     const existente = carrito.find(l => mismaLinea(l, nueva));
-    if (existente) existente.cantidad += cantidad;
+    if (existente){
+      existente.cantidad += cantidad;
+      if (!existente.img && nueva.img) existente.img = nueva.img;
+      if (!existente.icon && nueva.icon) existente.icon = nueva.icon;
+    }
     else carrito.push(nueva);
     persistir();
     renderCarrito();
@@ -63,6 +71,16 @@
     if (linea.cantidad < 1) carrito.splice(i, 1);
     persistir();
     renderCarrito();
+  }
+
+  // Unidades de un producto en la bolsa, sumando todas sus tallas
+  const cantidadDe = (nombre) => carrito.reduce((n, l) => n + (l.nombre === nombre ? l.cantidad : 0), 0);
+
+  // Botón "−" de las tarjetas: resta una unidad de la última línea de ese producto
+  function quitarUno(nombre){
+    for (let i = carrito.length - 1; i >= 0; i--){
+      if (carrito[i].nombre === nombre){ cambiarCantidad(i, -1); return; }
+    }
   }
 
   function quitarLinea(i){
@@ -241,10 +259,22 @@
     contador.hidden = unidades === 0;
     if (bagBtn) bagBtn.setAttribute("aria-label", unidades ? `Ver bolsa (${unidades} ${unidades === 1 ? "producto" : "productos"})` : "Ver bolsa");
 
+    // Avisa a las tarjetas del catálogo para que muestren la cantidad (js/tienda.js)
+    document.dispatchEvent(new CustomEvent("sb:carrito"));
+
     if (paso !== "enviado" && !carrito.length) paso = "items";
     if (paso === "datos") renderDatos();
     else if (paso === "enviado") renderEnviado();
     else renderItems();
+  }
+
+  // Foto del producto, o su icono; las líneas guardadas antes se buscan en el catálogo
+  function mediaLinea(l){
+    const p = SB.catalogo && SB.catalogo.productos.find(x => x.name === l.nombre);
+    const img = l.img || (p && p.imgs[0]);
+    if (img) return `<img src="${esc(img)}" alt="" loading="lazy" decoding="async">`;
+    const icon = l.icon || (p && p.icon);
+    return (icon && SB.ICONS[icon]) || SB.BAG_ADD;
   }
 
   function renderItems(){
@@ -265,6 +295,7 @@
       <ul class="cart-list">
         ${carrito.map((l, i) => `
           <li class="cart-item">
+            <div class="cart-item-media">${mediaLinea(l)}</div>
             <div>
               <p class="cart-item-name">${esc(l.nombre)}</p>
               <p class="cart-item-meta">${esRopa(l) ? "Ropa" : esc(l.categoria)} · ${SB.money(l.precio)} c/u</p>
@@ -426,7 +457,7 @@
     const categoria = btn.dataset.categoria || "";
     const talla = btn.dataset.talla || "";
     const tallas = btn.dataset.tallas ? btn.dataset.tallas.split("|") : [];
-    agregarAlCarrito(nombre, precio, categoria, talla, 1, tallas);
+    agregarAlCarrito(nombre, precio, categoria, talla, 1, tallas, {img: btn.dataset.img, icon: btn.dataset.icon});
   });
 
   if (bagBtn){
@@ -498,7 +529,7 @@
   /* ---------- API pública ---------- */
   Object.assign(window, {agregarAlCarrito, renderCarrito, calcularTotal, generarMensajeWhatsApp, enviarPedido});
   Object.defineProperty(window, "carrito", {get: () => carrito, configurable: true});
-  SB.carrito = {abrir: abrirCarrito, cerrar: cerrarCarrito, vaciar: vaciarCarrito};
+  SB.carrito = {abrir: abrirCarrito, cerrar: cerrarCarrito, vaciar: vaciarCarrito, cantidadDe, quitarUno};
 
   renderCarrito();
 })();

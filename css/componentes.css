@@ -966,7 +966,7 @@ html.js-anim .reveal.is-in{opacity:1;transform:none;}
 .card:has(.card-open:focus-visible) .card-art{outline:2.5px solid var(--rose);outline-offset:3px;}
 .card-art{z-index:2;pointer-events:none;}
 .card-art .fav-toggle{pointer-events:auto;}
-.card-foot .buy-btn{position:relative;z-index:2;}
+.card-foot .buy-btn,.card-buy{position:relative;z-index:2;}
 .card-art.has-img::before{display:none;}
 .card-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease-out);}
 .card:hover .card-img{transform:scale(1.04);}
@@ -974,6 +974,39 @@ html.js-anim .reveal.is-in{opacity:1;transform:none;}
 /* "Agregar al carrito" se acorta a "Agregar" cuando la tarjeta es angosta */
 .card-foot{container-type:inline-size;}
 @container (max-width:300px){.buy-extra{display:none;}}
+
+/* Selector − cantidad + que reemplaza a "Agregar" cuando el producto ya está en la bolsa */
+.card-buy{display:flex;}
+.card-qty{
+  display:inline-flex;align-items:center;justify-content:space-between;gap:.15rem;padding:.2rem;
+  border-radius:999px;background:var(--ink);color:var(--cream);animation:cardQtyIn .35s var(--ease-out);
+}
+.card-qty-btn{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;transition:background .2s,transform .2s;}
+.card-qty-btn:hover{background:rgba(var(--cream-rgb),.16);}
+.card-qty-btn:active{transform:scale(.9);}
+.card-qty-btn svg{width:14px;height:14px;}
+.card-qty output{min-width:1.6rem;text-align:center;font-weight:800;font-size:.82rem;font-variant-numeric:tabular-nums;}
+.new-drop .card-qty{background:var(--cream);color:var(--ink);}
+.new-drop .card-qty-btn:hover{background:rgba(var(--ink-rgb),.1);}
+@keyframes cardQtyIn{from{transform:scale(.9);opacity:.4;}to{transform:none;opacity:1;}}
+@media (max-width:640px){
+  .card-buy > *{width:100%;}
+  .card-qty-btn{width:34px;height:34px;}
+}
+
+/* Bolsa: miniatura con la foto o el icono de cada producto */
+.cart-item{grid-template-columns:64px minmax(0,1fr) auto;column-gap:.9rem;}
+.cart-item-media{
+  grid-row:1 / span 2;align-self:start;width:64px;aspect-ratio:1;border-radius:12px;overflow:hidden;
+  display:grid;place-items:center;background:var(--tile);color:var(--rose-deep);
+}
+.cart-item-media img{width:100%;height:100%;object-fit:cover;}
+.cart-item-media svg{width:56%;height:56%;}
+.cart-item .cart-item-controls,.cart-item .cart-error{grid-column:2 / -1;}
+@media (max-width:400px){
+  .cart-item{grid-template-columns:52px minmax(0,1fr) auto;}
+  .cart-item-media{width:52px;}
+}
 
 /* =====================================================================
    VISTA DE PRODUCTO — la crea js/producto.js.

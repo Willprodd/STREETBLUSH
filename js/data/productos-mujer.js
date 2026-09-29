@@ -30,7 +30,7 @@ window.SB_TIENDA = {
   // Círculos de "Elige una categoría". Usa img (ruta desde mujer/index.html) o icon.
   // La primera, con id "", es "ver todo".
   categorias: [
-    {id:"", nombre:"Todo", img:"../assets/img/emblema.jpg"},
+    {id:"", nombre:"Todo", img:"../assets/img/logo-todo.jpg"},
     {id:"labios", nombre:"Labios", img:"../assets/img/labios.jpg"},
     {id:"rubores", nombre:"Rubores", img:"../assets/img/rubor.jpg"},
     {id:"bases", nombre:"Bases", img:"../assets/img/base.jpg"},

@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-28T00:00:00Z",
+  "title": "Design System: Street Blush Hombre",
+  "extensions": {
+    "scope": "Men's streetwear store only (hombre/). The makeup store (mujer/, css/tema-mujer.css) keeps its own incumbent world: pink-tinted paper, Fraunces and Manrope. Shared brand constants: logo, emblem, rose #9e2f55 / #6e1d3b, Archivo Black campaign titles, black inverted NEW DROP section.",
+    "colorMeta": {
+      "ink": {
+        "role": "primary",
+        "displayName": "Street Ink",
+        "canonical": "#1c1e22",
+        "tonalRamp": [
+          "#0e0f11",
+          "#1c1e22",
+          "#2a2d33",
+          "#383b41",
+          "#5f636a",
+          "#9a9da2",
+          "#cfd0d2",
+          "#eeeff0"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "canonical": "#383b41"
+      },
+      "ink-black": {
+        "role": "primary",
+        "displayName": "Pure Black (hover)",
+        "canonical": "#000000"
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted Slate",
+        "canonical": "#5f636a"
+      },
+      "placeholder": {
+        "role": "neutral",
+        "displayName": "Placeholder",
+        "canonical": "#6f7279"
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper White",
+        "canonical": "#ffffff"
+      },
+      "band": {
+        "role": "neutral",
+        "displayName": "Soft Band",
+        "canonical": "#f5f5f3"
+      },
+      "tile": {
+        "role": "neutral",
+        "displayName": "Photo Tile",
+        "canonical": "#f1f1ef"
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e6e6e3"
+      },
+      "tile-line": {
+        "role": "neutral",
+        "displayName": "Tile Line",
+        "canonical": "#e2e2df"
+      },
+      "input-stroke": {
+        "role": "neutral",
+        "displayName": "Input Stroke",
+        "canonical": "#cfcfcb"
+      },
+      "drop-night": {
+        "role": "neutral",
+        "displayName": "Drop Night",
+        "canonical": "#121315"
+      },
+      "drop-tile": {
+        "role": "neutral",
+        "displayName": "Drop Tile",
+        "canonical": "#26282c"
+      },
+      "rose": {
+        "role": "secondary",
+        "displayName": "Street Blush Rose",
+        "canonical": "#9e2f55",
+        "tonalRamp": [
+          "#240912",
+          "#4a1328",
+          "#6e1d3b",
+          "#9e2f55",
+          "#b9557a",
+          "#d47a9a",
+          "#efdde4",
+          "#f8f0f3"
+        ]
+      },
+      "rose-deep": {
+        "role": "secondary",
+        "displayName": "Street Blush Rose Deep",
+        "canonical": "#6e1d3b"
+      },
+      "rose-light": {
+        "role": "secondary",
+        "displayName": "Rose Light",
+        "canonical": "#d47a9a"
+      },
+      "blush": {
+        "role": "secondary",
+        "displayName": "Blush",
+        "canonical": "#efdde4"
+      },
+      "error": {
+        "role": "neutral",
+        "displayName": "Error Red",
+        "canonical": "#b42318"
+      }
+    },
+    "typographyMeta": {
+      "campaign": {
+        "displayName": "Campaign",
+        "purpose": "Hero slide names, drop band title, collection slide names, countdown digits. Archivo Black only here."
+      },
+      "campaign-page": {
+        "displayName": "Campaign Page",
+        "purpose": "Collection and help page H1, welcome popup title; uppercase."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings, cart and product-view titles."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Product names; prices at 600 tabular."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Paragraphs, 34 to 70ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase muted group labels: footer and mega-menu column heads, table heads, countdown caption. Never a tagline above a headline."
+      }
+    },
+    "shadows": [
+      {
+        "name": "menu-drop",
+        "value": "0 30px 40px -30px rgba(28,30,34,.25)",
+        "purpose": "Full-width mega menu."
+      },
+      {
+        "name": "popover",
+        "value": "0 20px 40px -20px rgba(28,30,34,.3)",
+        "purpose": "Account panel."
+      },
+      {
+        "name": "quick-add",
+        "value": "0 10px 24px -14px rgba(28,30,34,.45)",
+        "purpose": "Size tray over the product photo."
+      },
+      {
+        "name": "floating-action",
+        "value": "0 14px 30px -12px rgba(28,30,34,.6)",
+        "purpose": "Floating WhatsApp button."
+      },
+      {
+        "name": "dialog",
+        "value": "0 40px 90px -30px rgba(0,0,0,.45)",
+        "purpose": "Welcome popup."
+      },
+      {
+        "name": "side-cart",
+        "value": "-30px 0 60px -30px rgba(28,30,34,.35)",
+        "purpose": "Side cart panel."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(.16,1,.3,1)",
+        "purpose": "Drawers, underline reveals, quick-add rise, popup scale."
+      },
+      {
+        "name": "hero-crossfade",
+        "value": "opacity .8s ease",
+        "purpose": "Hero slide change; collections use .6s."
+      },
+      {
+        "name": "hero-settle",
+        "value": "scale 1.06 to 1 over 7.5s ease-out",
+        "purpose": "Active hero photo."
+      },
+      {
+        "name": "copy-rise",
+        "value": "translate 18px + blur 4px to 0 over .8s ease-out, 80ms stagger",
+        "purpose": "Slide copy entrance."
+      },
+      {
+        "name": "tab-stagger",
+        "value": "opacity .5s ease-out, 50ms per card",
+        "purpose": "Tab panel cards."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "767px"
+      },
+      {
+        "name": "tablet",
+        "value": "1023px"
+      },
+      {
+        "name": "nav-collapse",
+        "value": "1100px"
+      },
+      {
+        "name": "drop-grid",
+        "value": "1180px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Every commit action: shop the drop, add to cart, send order.",
+      "html": "<button class=\"ds-btn-dark\">Comprar el drop</button>",
+      "css": ".ds-btn-dark{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:.75rem 1.6rem;border-radius:6px;border:1px solid transparent;background:#1c1e22;color:#fff;font-family:'Instrument Sans','Segoe UI',system-ui,sans-serif;font-size:.9rem;font-weight:600;letter-spacing:.01em;cursor:pointer;transition:background .2s,transform .15s}.ds-btn-dark:hover{background:#000}.ds-btn-dark:active{transform:scale(.98)}.ds-btn-dark:focus-visible{outline:2px solid #1c1e22;outline-offset:3px}"
+    },
+    {
+      "name": "Line Button",
+      "kind": "button",
+      "refersTo": "button-line",
+      "description": "Secondary action beside a primary one.",
+      "html": "<button class=\"ds-btn-line\">Ver guía de tallas</button>",
+      "css": ".ds-btn-line{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:.75rem 1.6rem;border-radius:6px;border:1px solid #1c1e22;background:transparent;color:#1c1e22;font-family:'Instrument Sans','Segoe UI',system-ui,sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s,color .2s}.ds-btn-line:hover{background:#1c1e22;color:#fff}.ds-btn-line:focus-visible{outline:2px solid #1c1e22;outline-offset:3px}"
+    },
+    {
+      "name": "Tab / Chip",
+      "kind": "chip",
+      "refersTo": "tab",
+      "description": "Collection tabs and filter chips; selected fills ink.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\">Camisetas</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Pantalones</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Accesorios</button></div>",
+      "css": ".ds-tabs{display:flex;gap:.4rem;font-family:'Instrument Sans','Segoe UI',system-ui,sans-serif}.ds-tab{min-height:40px;padding:.45rem 1.05rem;border-radius:999px;border:1px solid #e6e6e3;background:#fff;color:#1c1e22;font:inherit;font-size:.9rem;font-weight:500;cursor:pointer;transition:background .2s,color .2s,border-color .2s}.ds-tab:hover{border-color:#1c1e22}.ds-tab[aria-selected=\"true\"]{background:#1c1e22;border-color:#1c1e22;color:#fff}.ds-tab:focus-visible{outline:2px solid #1c1e22;outline-offset:3px}"
+    },
+    {
+      "name": "Product Card",
+      "kind": "card",
+      "refersTo": "product-media",
+      "description": "3:4 photo on a light tile, NEW DROP badge, quick-add sizes on hover.",
+      "html": "<article class=\"ds-pc\"><div class=\"ds-pc-media\"><span class=\"ds-pc-badge\">New drop</span><div class=\"ds-pc-quick\"><p>Agregar talla</p><div class=\"ds-pc-sizes\"><button>S</button><button>M</button><button>L</button><button>XL</button></div></div></div><div class=\"ds-pc-info\"><a href=\"#\" class=\"ds-pc-name\">Tee Oversize Carbón</a><span class=\"ds-pc-meta\">Oversize · Negro</span><span class=\"ds-pc-price\">$89.000 COP</span></div></article>",
+      "css": ".ds-pc{width:240px;font-family:'Instrument Sans','Segoe UI',system-ui,sans-serif;color:#1c1e22}.ds-pc-media{position:relative;aspect-ratio:3/4;border-radius:6px;overflow:hidden;background:#f1f1ef}.ds-pc-badge{position:absolute;top:.6rem;left:.6rem;padding:.3rem .5rem;border-radius:4px;background:#6e1d3b;color:#fff;font-size:.66rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase}.ds-pc-quick{position:absolute;left:.5rem;right:.5rem;bottom:.5rem;padding:.7rem;border-radius:6px;background:rgba(255,255,255,.97);box-shadow:0 10px 24px -14px rgba(28,30,34,.45);opacity:0;translate:0 10px;transition:opacity .25s,translate .35s cubic-bezier(.16,1,.3,1)}.ds-pc:hover .ds-pc-quick,.ds-pc:focus-within .ds-pc-quick{opacity:1;translate:0 0}.ds-pc-quick p{margin:0 0 .5rem;font-size:.78rem;font-weight:600}.ds-pc-sizes{display:flex;gap:.35rem}.ds-pc-sizes button{min-width:40px;height:34px;border:1px solid #e6e6e3;border-radius:4px;background:#fff;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer}.ds-pc-sizes button:hover{background:#1c1e22;border-color:#1c1e22;color:#fff}.ds-pc-info{display:flex;flex-direction:column;gap:.18rem;padding-top:.8rem}.ds-pc-name{color:inherit;text-decoration:none;font-size:.95rem;font-weight:500}.ds-pc-name:hover{text-decoration:underline}.ds-pc-meta{font-size:.82rem;color:#5f636a}.ds-pc-price{margin-top:.3rem;font-size:.95rem;font-weight:600;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Newsletter Input",
+      "kind": "input",
+      "refersTo": "input-newsletter",
+      "description": "Text field with ink focus halo.",
+      "html": "<input class=\"ds-input\" type=\"email\" placeholder=\"tu@correo.com\">",
+      "css": ".ds-input{width:280px;height:50px;padding:0 1rem;border:1px solid #cfcfcb;border-radius:6px;background:#fff;font-family:'Instrument Sans','Segoe UI',system-ui,sans-serif;font-size:1rem;color:#1c1e22;caret-color:#9e2f55;transition:border-color .2s,box-shadow .2s}.ds-input::placeholder{color:#6f7279}.ds-input:focus{outline:none;border-color:#1c1e22;box-shadow:0 0 0 3px rgba(28,30,34,.08)}"
+    },
+    {
+      "name": "Header Nav",
+      "kind": "nav",
+      "refersTo": "headline",
+      "description": "Centered nav links with left-drawn underline on hover.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\">Novedades</a><a href=\"#\">Camisetas</a><a href=\"#\">Pantalones</a><a href=\"#\">Accesorios</a></nav>",
+      "css": ".ds-nav{display:flex;gap:2rem;padding:0 1.5rem;background:#fff;border-bottom:1px solid #e6e6e3;font-family:'Instrument Sans','Segoe UI',system-ui,sans-serif}.ds-nav a{position:relative;padding:1.4rem 0;color:#1c1e22;text-decoration:none;font-size:.93rem;font-weight:500}.ds-nav a::after{content:\"\";position:absolute;left:0;right:0;bottom:1.1rem;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.16,1,.3,1)}.ds-nav a:hover::after{transform:scaleX(1)}.ds-nav a:focus-visible{outline:2px solid #1c1e22;outline-offset:3px}"
+    },
+    {
+      "name": "NEW DROP Countdown",
+      "kind": "custom",
+      "refersTo": "campaign",
+      "description": "Brand constant: black band, Archivo Black digits, rose-light units.",
+      "html": "<div class=\"ds-drop\"><p class=\"ds-drop-title\">NEW DROP</p><span class=\"ds-drop-label\">El drop cierra en</span><div class=\"ds-cells\"><div><b>03</b><small>días</small></div><div><b>12</b><small>horas</small></div><div><b>45</b><small>min</small></div></div></div>",
+      "css": ".ds-drop{padding:2rem;background:#121315;color:#fff;font-family:'Instrument Sans','Segoe UI',system-ui,sans-serif}.ds-drop-title{margin:0 0 1.4rem;font-family:'Archivo Black','Arial Black',sans-serif;font-size:3rem;line-height:.9;letter-spacing:-.01em}.ds-drop-label{display:block;margin-bottom:.7rem;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.66)}.ds-cells{display:flex;gap:.5rem}.ds-cells div{min-width:62px;padding:.6rem .55rem .5rem;border-radius:6px;text-align:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12)}.ds-cells b{display:block;font-family:'Archivo Black','Arial Black',sans-serif;font-weight:400;font-size:1.45rem;line-height:1;font-variant-numeric:tabular-nums}.ds-cells small{display:block;margin-top:.3rem;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#d47a9a}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Clean Rack",
+    "overview": "A standard fashion storefront executed at full fidelity: white ground, near-black type, big 3:4 garment photos on very light grey, black rectangular buttons with barely softened corners. The store does not try to look like a luxury lookbook or a dark streetwear zine; it looks like a well-run clothing shop, and the brand lives in a few fixed places instead of everywhere: the logo, the pink announcement strip, the Archivo Black campaign titles, and the black NEW DROP band.\n\nDensity is catalog density. Four-column product grids on desktop, two on mobile, horizontal hairlines between regions, soft grey bands (#f5f5f3) to separate help, newsletter and collection slides. Motion is quiet: crossfading slideshows with a slow photo settle, underline reveals on navigation, a second product photo on hover.",
+    "keyCharacteristics": [
+      "White ground, ink text, black primary actions; rose is a signal, never a surface.",
+      "One sans (Instrument Sans) for everything except campaign titles.",
+      "3:4 photography on a light tile, 6px corners across photos, buttons, inputs and slides.",
+      "Flat surfaces; shadows only on floating layers (menus, quick-add, popup, cart, WhatsApp button).",
+      "The NEW DROP band is the one dark room in a white house."
+    ],
+    "rules": [
+      {
+        "name": "The Rose Is A Signal Rule",
+        "body": "Rose appears only in the announcement strip, NEW DROP badges, active/added/favorited states, link hover, and selection/caret. Never as a button fill, never as a section background. If a screen shows rose on more than those signals, it is off-system.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Dark Room Rule",
+        "body": "Drop Night is reserved for the NEW DROP band (and the hero behind its photos). No other section goes dark.",
+        "section": "colors"
+      },
+      {
+        "name": "The Campaign-Only Rule",
+        "body": "Archivo Black is for campaign and drop names, page H1s and the countdown digits. Section headings, product names, buttons and UI text are always Instrument Sans.",
+        "section": "typography"
+      },
+      {
+        "name": "The Numbers Line Up Rule",
+        "body": "Prices, counters, sizes and countdown use tabular numerals.",
+        "section": "typography"
+      },
+      {
+        "name": "The Only-What-Floats Rule",
+        "body": "Cards, buttons, bands and slides never carry a shadow. If it is in the document flow, it is flat.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep the page white with ink text and use the ink button for every primary action, including the shared cart and product view.",
+      "Do use 6px corners for photos, buttons and inputs; 4px for small inner parts; 10px only for floating panels.",
+      "Do shoot or crop product photos 3:4 and give every card a second photo for the hover swap.",
+      "Do set campaign and drop names in Archivo Black capitals; everything else in Instrument Sans.",
+      "Do separate regions with 1px #e6e6e3 hairlines or the #f5f5f3 band, not shadows.",
+      "Do keep the NEW DROP band black with inverted colors and its countdown."
+    ],
+    "donts": [
+      "Don't use rose as a button fill or section background; it is limited to the strip, badges, and active/added/favorited/hover signals.",
+      "Don't add a second dark section; the drop band is the only one.",
+      "Don't put shadows on in-flow cards, buttons or bands.",
+      "Don't put an uppercase label or tagline above a section headline or product title.",
+      "Don't apply these tokens to the makeup store; it keeps its pink-tinted paper, Fraunces and Manrope."
+    ]
+  }
+}

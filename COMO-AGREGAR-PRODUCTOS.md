@@ -6,7 +6,7 @@ Las tarjetas, la búsqueda, la vista de producto y el carrito se arman solos.
 | Tienda | Archivo de productos | Fotos |
 | --- | --- | --- |
 | Maquillaje | `js/data/productos-mujer.js` | `assets/img/productos/` |
-| Hombre | `js/data/productos-hombre.js` | `assets/img/productos/` |
+| Hombre | `js/data/productos-hombre.js` | `assets/img/hombre/` |
 
 ## 1. Sube la foto
 
@@ -55,6 +55,33 @@ Abre la tienda y recarga. Si un producto no aparece, abre la consola del navegad
 
 Cada producto tiene su propio enlace para compartir:
 `mujer/index.html#producto/m-labial-rojo-fuego`.
+
+## Tienda de hombre: lo que cambia
+
+- Las fotos van en `assets/img/hombre/`, en formato **vertical 3:4** (por ejemplo 900 × 1200 px).
+  Usa `imgs` con dos fotos: la segunda aparece al pasar el mouse por la tarjeta.
+- Cada producto lleva `cat` (categoría) y `sub` (subcategoría). Con eso aparece solo en el menú,
+  en las tabs del inicio y en la página de colección (`hombre/coleccion.html?c=camisetas&s=oversize`).
+- `destacado:true` lo muestra en *Destacados* del inicio; `drop:true` en *New drop* y *Novedades*.
+- `color` se muestra debajo del nombre en la tarjeta.
+
+```js
+{
+  id:"h-tee-oversize-arena", cat:"camisetas", sub:"oversize",
+  name:"Tee Oversize Arena", price:89000, color:"Arena",
+  imgs:["../assets/img/hombre/tee-oversize-arena-1.jpg", "../assets/img/hombre/tee-oversize-arena-2.jpg"],
+  desc:"Algodón de 240 g, hombro caído.",
+  detalle:"Texto largo que se ve al abrir el producto.",
+  caracteristicas:["Algodón 240 g", "Corte oversize"]
+},
+```
+
+**Nueva subcategoría de hombre:** en `categorias` de `productos-hombre.js`, dentro del `sub` de su categoría,
+agrega `{id:"manga-larga", nombre:"Manga larga"}` y usa `sub:"manga-larga"` en sus productos. El menú se actualiza solo.
+
+Las tabs de *Encuentra tu estilo* se eligen en `hombre/index.html`, en `data-subs="oversize,jeans,cargos,hoodies,gorras"`.
+
+Las fotos de hombre que hay ahora son de stock (Pexels) y son temporales: la lista está en `assets/img/hombre/CREDITOS.md`.
 
 ## Nueva categoría de maquillaje
 

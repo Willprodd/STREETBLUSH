@@ -26,6 +26,59 @@
   let ultimoFoco = null;
   let entradaEnHistorial = false;   // true si al abrir se sumó una entrada al historial
   let timerAgregado = null;
+  let focoGuia = null;              // botón de la guía que abrió el modal
+
+  /* ---------- Guía de tallas (modal, solo ropa) ---------- */
+  const sgOverlay = document.createElement("div");
+  sgOverlay.className = "sg-overlay";
+  const sgBox = document.createElement("div");
+  sgBox.className = "sg";
+  sgBox.setAttribute("role", "dialog");
+  sgBox.setAttribute("aria-modal", "true");
+  sgBox.setAttribute("aria-labelledby", "sgTitle");
+  sgBox.inert = true;
+  document.body.append(sgOverlay, sgBox);
+
+  function abrirGuia(){
+    focoGuia = document.activeElement;
+    sgBox.innerHTML = `
+      <button class="sg-close" type="button" data-sg="cerrar" aria-label="Cerrar guía de tallas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <h2 id="sgTitle">Guía de tallas</h2>
+      <p class="sg-intro">Medidas de la prenda en centímetros, tomadas en plano. Nuestros cortes son oversize: si estás entre dos tallas, elige la menor para un ajuste más estándar.</p>
+      <div class="sg-scroll">
+        <table class="sg-table">
+          <caption class="sr-only">Medidas por talla en centímetros</caption>
+          <thead><tr><th scope="col">Talla</th><th scope="col">Pecho</th><th scope="col">Largo</th><th scope="col">Manga</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">S</th><td>56</td><td>68</td><td>58</td></tr>
+            <tr><th scope="row">M</th><td>59</td><td>70</td><td>60</td></tr>
+            <tr><th scope="row">L</th><td>62</td><td>72</td><td>61</td></tr>
+            <tr><th scope="row">XL</th><td>65</td><td>74</td><td>63</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sg-tips">
+        <p><b>¿Cómo medir?</b> Extiende una prenda que te quede bien y mide de costura a costura: el pecho bajo las mangas y el largo desde el hombro hasta el dobladillo.</p>
+        <p>¿Dudas? Escríbenos por WhatsApp y te ayudamos a elegir tu talla antes de pedir.</p>
+      </div>`;
+    sgBox.inert = false;
+    sgOverlay.classList.add("open");
+    sgBox.classList.add("open");
+    setTimeout(() => sgBox.querySelector("[data-sg=\"cerrar\"]").focus({preventScroll:true}), 50);
+  }
+
+  function cerrarGuia(devolverFoco = true){
+    if (!sgBox.classList.contains("open")) return;
+    sgBox.classList.remove("open");
+    sgOverlay.classList.remove("open");
+    sgBox.inert = true;
+    if (devolverFoco && focoGuia && document.contains(focoGuia)) focoGuia.focus({preventScroll:true});
+  }
+  sgOverlay.addEventListener("click", () => cerrarGuia());
+  sgBox.addEventListener("click", (e) => { if (e.target.closest("[data-sg=\"cerrar\"]")) cerrarGuia(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && sgBox.classList.contains("open")) cerrarGuia(); });
 
   /* ---------- Estructura ---------- */
   const overlay = document.createElement("div");
@@ -190,7 +243,8 @@
     actualizarCantidad();
   }
 
-  // Tallas justo debajo del precio (solo ropa)
+  // Tallas justo debajo del precio (solo ropa). La guía de tallas solo aplica a S–XL:
+  // los jeans (tallas numéricas) no la muestran.
   function tallasHTML(p){
     if (!p.tallas.length) return "";
     return `
@@ -204,6 +258,7 @@
             </label>`).join("")}
         </div>
         <p class="cart-error" id="pvTallaError" hidden>Elige una talla para agregarlo.</p>
+        ${p.tallas.length > 1 && isNaN(p.tallas[0]) ? `<button class="sg-link" type="button" data-pv="guia">Ver guía de tallas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>` : ""}
       </fieldset>`;
   }
 
@@ -230,7 +285,7 @@
       }
       return;
     }
-    window.agregarAlCarrito(p.name, p.price, p.categoriaCarrito, talla, cantidad, p.tallas);
+    window.agregarAlCarrito(p.name, p.price, p.categoriaCarrito, talla, cantidad, p.tallas, {img: p.imgs[0], icon: p.icon});
 
     // Confirmación en el mismo botón; la cantidad vuelve a 1 para el siguiente
     const texto = dialogo.querySelector(".pv-add-text");
@@ -256,6 +311,7 @@
     if (!el) return;
     switch (el.dataset.pv){
       case "cerrar": cerrar(); break;
+      case "guia": abrirGuia(); break;
       case "menos": cantidad = Math.max(1, cantidad - 1); actualizarCantidad(); break;
       case "mas": cantidad = Math.min(CANTIDAD_MAX, cantidad + 1); actualizarCantidad(); break;
       case "agregar": agregar(); break;
@@ -289,6 +345,7 @@
   });
 
   document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && sgBox.classList.contains("open")) return;   // la guía de tallas se cierra primero
     if (e.key === "Escape" && estaAbierta()) cerrar();
   });
 
