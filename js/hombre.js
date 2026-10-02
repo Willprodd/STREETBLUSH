@@ -84,7 +84,7 @@
       : SB.ICONS[p.icon];
   }
 
-  const datosCarrito = (p, talla) => `data-nombre="${esc(p.name)}" data-precio="${p.price}" data-categoria="Ropa"
+  const datosCarrito = (p, talla) => `data-id="${esc(p.id)}" data-nombre="${esc(p.name)}" data-precio="${p.price}" data-categoria="Ropa"
     data-talla="${esc(talla)}" data-tallas="${esc(p.tallas.join("|"))}" data-img="${esc(p.imgs[0] || "")}" data-icon="${esc(p.icon)}"`;
 
   function quickHTML(p){
@@ -487,6 +487,17 @@
     const input = form.querySelector("input[type=email]");
     const hint = form.querySelector("[data-news-hint]");
     const textoHint = hint.textContent;
+    const consentimiento = form.querySelector(".hb-news-consent input[type=checkbox]");
+    const consentimientoError = form.querySelector(".hb-news-error");
+    // El botón nace deshabilitado solo en el popup (ver markup en js/hombre-shell.js);
+    // el formulario del footer no se toca, sigue solo con la validación de respaldo.
+    const esPopup = !!form.closest("#hbPopup");
+    const botonEnviar = esPopup ? form.querySelector('button[type="submit"]') : null;
+    const sincronizarBoton = () => {
+      if (!botonEnviar || !consentimiento) return;
+      botonEnviar.disabled = !consentimiento.checked;
+      botonEnviar.setAttribute("aria-disabled", String(!consentimiento.checked));
+    };
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const correo = input.value.trim();
@@ -497,20 +508,41 @@
         input.focus();
         return;
       }
+      if (consentimiento && !consentimiento.checked){
+        consentimiento.setAttribute("aria-invalid", "true");
+        if (consentimientoError) consentimientoError.hidden = false;
+        consentimiento.focus();
+        return;
+      }
       input.setAttribute("aria-invalid", "false");
       hint.classList.remove("is-error");
       hint.classList.add("is-ok");
       hint.textContent = "¡Listo! Termina de confirmar en WhatsApp.";
+
+      // Guarda el suscriptor en Supabase sin bloquear ni condicionar la apertura de WhatsApp.
+      try{
+        if (SB.db && typeof SB.db.guardarSuscriptor === "function"){
+          SB.db.guardarSuscriptor({email: correo, tienda: "hombre"}).catch(() => {});
+        }
+      }catch(e){ /* nunca debe impedir el paso siguiente */ }
+
       window.open(SB.waLink(`Hola Street Blush! Quiero recibir los avisos de nuevos drops en mi correo: ${correo}`), "_blank", "noopener");
       guardarPopup(180);
       if (form.closest("#hbPopup")) setTimeout(() => cerrarPopup(), 900);
       form.reset();
+      sincronizarBoton();
     });
     input.addEventListener("input", () => {
       if (input.getAttribute("aria-invalid") !== "true") return;
       input.setAttribute("aria-invalid", "false");
       hint.classList.remove("is-error");
       hint.textContent = textoHint;
+    });
+    if (consentimiento) consentimiento.addEventListener("change", () => {
+      sincronizarBoton();
+      if (!consentimiento.checked) return;
+      consentimiento.setAttribute("aria-invalid", "false");
+      if (consentimientoError) consentimientoError.hidden = true;
     });
   });
 

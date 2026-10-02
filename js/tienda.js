@@ -83,8 +83,8 @@
       : SB.ICONS[p.icon];
   }
 
-  // Datos que lee js/carrito.js al agregar (nombre, precio, talla, foto o icono)
-  const datosCarrito = (p) => `data-nombre="${esc(p.name)}" data-precio="${p.price}" data-categoria="${esc(p.categoriaCarrito)}"
+  // Datos que lee js/carrito.js al agregar (id, nombre, precio, talla, foto o icono)
+  const datosCarrito = (p) => `data-id="${esc(p.id)}" data-nombre="${esc(p.name)}" data-precio="${p.price}" data-categoria="${esc(p.categoriaCarrito)}"
         data-talla="${esc(p.tallas.length === 1 ? p.tallas[0] : "")}" data-tallas="${esc(p.tallas.join("|"))}"
         data-img="${esc(p.imgs[0] || "")}" data-icon="${esc(p.icon)}"`;
 

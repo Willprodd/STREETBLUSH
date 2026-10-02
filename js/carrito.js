@@ -20,9 +20,9 @@
   const TALLAS_ROPA = ["S", "M", "L", "XL", "XXL"];
 
   /* ---------- Estado ---------- */
-  // Cada línea: {nombre, precio, cantidad, categoria, talla, img, icon}
+  // Cada línea: {nombre, precio, cantidad, categoria, talla, img, icon, id}
   let carrito = leer(KEY_CARRITO, []).filter(esLineaValida);
-  let cliente = Object.assign({nombre:"", telefono:"", direccion:"", ciudad:"", notas:""}, leer(KEY_CLIENTE, {}));
+  let cliente = Object.assign({nombre:"", telefono:"", direccion:"", ciudad:"", notas:"", consentimiento:false}, leer(KEY_CLIENTE, {}));
   let paso = "items";           // "items" | "datos" | "enviado"
   let ultimoFoco = null;
 
@@ -44,10 +44,12 @@
   // cantidad y tallas son opcionales: la vista de producto manda la cantidad elegida,
   // y tallas guarda las opciones del producto para el selector de la bolsa.
   // media = {img, icon}: la foto o el icono que se ve en la bolsa
-  function agregarAlCarrito(nombre, precio, categoria, talla, cantidad = 1, tallas = [], media = {}){
+  // id: id real del producto en el catálogo (para relacionar el pedido en Supabase)
+  function agregarAlCarrito(nombre, precio, categoria, talla, cantidad = 1, tallas = [], media = {}, id = ""){
     cantidad = Math.max(1, parseInt(cantidad, 10) || 1);
     if (!nombre || !Number.isFinite(precio)) return;
     const nueva = {nombre, precio, cantidad, categoria: categoria || "", talla: talla || ""};
+    if (id) nueva.id = id;
     if (tallas.length) nueva.tallas = tallas;
     if (media.img) nueva.img = media.img;
     if (media.icon) nueva.icon = media.icon;
@@ -56,6 +58,7 @@
       existente.cantidad += cantidad;
       if (!existente.img && nueva.img) existente.img = nueva.img;
       if (!existente.icon && nueva.icon) existente.icon = nueva.icon;
+      if (!existente.id && nueva.id) existente.id = nueva.id;
     }
     else carrito.push(nueva);
     persistir();
@@ -143,15 +146,27 @@
     return partes.join("\n");
   }
 
+  // Acepta 3001234567, +573001234567 o 573001234567 (con espacios/guiones) y
+  // devuelve siempre +573XXXXXXXXX, o null si no es un celular colombiano válido.
+  function normalizarTelefonoCO(valor){
+    let limpio = String(valor).trim().replace(/[^\d+]/g, "").replace(/(?!^)\+/g, "");
+    if (/^3\d{9}$/.test(limpio)) return "+57" + limpio;
+    if (/^573\d{9}$/.test(limpio)) return "+" + limpio;
+    if (/^\+573\d{9}$/.test(limpio)) return limpio;
+    return null;
+  }
+
   // Devuelve {campo: mensaje} con los errores; vacío si todo está bien
   function validarCliente(){
     const errores = {};
     if (cliente.nombre.trim().length < 2) errores.nombre = "Escribe tu nombre.";
-    const digitos = cliente.telefono.replace(/\D/g, "");
-    if (!digitos) errores.telefono = "Escribe tu teléfono.";
-    else if (digitos.length < 7 || digitos.length > 13) errores.telefono = "Revisa el número: debe tener entre 7 y 13 dígitos.";
+    const telefonoOk = normalizarTelefonoCO(cliente.telefono);
+    if (!cliente.telefono.trim()) errores.telefono = "Escribe tu teléfono.";
+    else if (!telefonoOk) errores.telefono = "Escribe un celular colombiano válido (ej. 300 123 4567).";
     if (cliente.direccion.trim().length < 4) errores.direccion = "Escribe la dirección de entrega.";
     if (cliente.ciudad.trim().length < 2) errores.ciudad = "Escribe la ciudad o municipio.";
+    if (!cliente.consentimiento) errores.consentimiento = "Debes aceptar el tratamiento de tus datos para continuar.";
+    if (telefonoOk) cliente.telefono = telefonoOk;
     return errores;
   }
 
@@ -171,6 +186,16 @@
     }
 
     guardar(KEY_CLIENTE, cliente);
+
+    // Guarda el pedido en Supabase sin bloquear ni condicionar el envío por WhatsApp:
+    // si esto falla, tarda o SB.db no cargó, la venta debe seguir su curso igual.
+    try{
+      if (SB.db && typeof SB.db.guardarPedido === "function"){
+        const tienda = document.body.classList.contains("tienda-mujer") ? "mujer" : "hombre";
+        SB.db.guardarPedido({tienda, cliente, carrito, total: calcularTotal()}).catch(() => {});
+      }
+    }catch(e){ /* nunca debe impedir el paso siguiente */ }
+
     const url = `https://wa.me/${SB.WHATSAPP_NUMBER}?text=${encodeURIComponent(generarMensajeWhatsApp())}`;
     const ventana = window.open(url, "_blank");
     if (ventana) ventana.opener = null;
@@ -355,7 +380,8 @@
     {id:"telefono", label:"Teléfono", tipo:"tel", auto:"tel", req:true, modo:"tel"},
     {id:"direccion", label:"Dirección", tipo:"text", auto:"street-address", req:true},
     {id:"ciudad", label:"Ciudad o municipio", tipo:"text", auto:"address-level2", req:true},
-    {id:"notas", label:"Notas (opcional)", area:true, placeholder:"Color, talla específica, indicaciones de entrega…"}
+    {id:"notas", label:"Notas (opcional)", area:true, placeholder:"Color, talla específica, indicaciones de entrega…"},
+    {id:"consentimiento", tipo:"checkbox", req:true}
   ];
 
   function renderDatos(){
@@ -370,6 +396,16 @@
       <form class="cart-form" id="cartForm" novalidate>
         ${CAMPOS.map(c => {
           const idInput = "cart" + c.id.charAt(0).toUpperCase() + c.id.slice(1);
+          if (c.tipo === "checkbox"){
+            return `
+              <div class="cart-field cart-field-checkbox">
+                <label class="cart-consent" for="${idInput}">
+                  <input id="${idInput}" name="${c.id}" type="checkbox"${cliente[c.id] ? " checked" : ""} required aria-describedby="${idInput}Error">
+                  Acepto la <a href="../hombre/politicas.html#privacidad" target="_blank" rel="noopener">política de privacidad</a>.
+                </label>
+                <p class="cart-error" id="${idInput}Error" hidden></p>
+              </div>`;
+          }
           const control = c.area
             ? `<textarea id="${idInput}" name="${c.id}" rows="3" placeholder="${c.placeholder}">${esc(cliente[c.id])}</textarea>`
             : `<input id="${idInput}" name="${c.id}" type="${c.tipo}" autocomplete="${c.auto}"${c.modo ? ` inputmode="${c.modo}"` : ""}${c.req ? " required" : ""} value="${esc(cliente[c.id])}" aria-describedby="${idInput}Error">`;
@@ -384,7 +420,7 @@
         <button type="submit" hidden></button>
       </form>`;
     foot.innerHTML = `
-      <button class="btn btn-rose" type="button" data-cart="enviar">${SB.WA_ICON} Enviar pedido por WhatsApp</button>
+      <button class="btn btn-rose" type="button" data-cart="enviar" id="cartEnviarBtn"${cliente.consentimiento ? "" : " disabled aria-disabled=\"true\""}>${SB.WA_ICON} Enviar pedido por WhatsApp</button>
       <button class="cart-link" type="button" data-cart="volver">Volver a la bolsa</button>`;
   }
 
@@ -405,7 +441,10 @@
   function leerFormulario(){
     const form = panel.querySelector("#cartForm");
     if (!form) return;
-    CAMPOS.forEach(c => { if (form.elements[c.id]) cliente[c.id] = form.elements[c.id].value; });
+    CAMPOS.forEach(c => {
+      if (!form.elements[c.id]) return;
+      cliente[c.id] = c.tipo === "checkbox" ? form.elements[c.id].checked : form.elements[c.id].value;
+    });
   }
 
   function mostrarErrores(errores){
@@ -457,7 +496,7 @@
     const categoria = btn.dataset.categoria || "";
     const talla = btn.dataset.talla || "";
     const tallas = btn.dataset.tallas ? btn.dataset.tallas.split("|") : [];
-    agregarAlCarrito(nombre, precio, categoria, talla, 1, tallas, {img: btn.dataset.img, icon: btn.dataset.icon});
+    agregarAlCarrito(nombre, precio, categoria, talla, 1, tallas, {img: btn.dataset.img, icon: btn.dataset.icon}, btn.dataset.id || "");
   });
 
   if (bagBtn){
@@ -497,6 +536,15 @@
   panel.addEventListener("change", (e) => {
     const select = e.target.closest('select[data-cart="talla"]');
     if (select) cambiarTalla(Number(select.dataset.i), select.value);
+    const consent = e.target.closest(".cart-consent input[type=checkbox]");
+    if (consent){
+      cliente.consentimiento = consent.checked;
+      const boton = panel.querySelector("#cartEnviarBtn");
+      if (boton){
+        boton.disabled = !consent.checked;
+        boton.setAttribute("aria-disabled", String(!consent.checked));
+      }
+    }
   });
 
   // Enter dentro del formulario = enviar
