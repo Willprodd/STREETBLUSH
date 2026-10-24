@@ -41,7 +41,9 @@ window.SB_TIENDA = {
     {id:"", nombre:"Todo", img:"../assets/img/logo-todo.jpg"},
     {id:"rostro", nombre:"Rostro", icon:"bottle"},
     {id:"labios", nombre:"Labios", img:"../assets/img/labios.jpg"},
+    {id:"ojos", nombre:"Ojos", icon:"mascara"},
     {id:"cejas", nombre:"Cejas", icon:"eyeliner"},
+    {id:"cuidado", nombre:"Cuidado", icon:"bottle"},
     {id:"accesorios", nombre:"Accesorios", icon:"spark"}
   ],
   productos: [
@@ -51,6 +53,7 @@ window.SB_TIENDA = {
       detalle:"Tu aliado para un acabado mate y sin imperfecciones. Este polvo suelto traslúcido se funde con tu piel, absorbe el exceso de grasa y controla el brillo durante horas sin alterar el color de tu maquillaje. Su fórmula micro-pulverizada deja un efecto aterciopelado y no deja efecto blanco en fotos con flash.",
       caracteristicas:["Absorbe el exceso de grasa y controla el brillo durante horas", "Neutraliza rojeces y equilibra el tono", "Efecto aterciopelado, sin efecto blanco en fotos con flash", "Indicado para pieles grasas y mixtas", "Se adapta a cualquier tono de piel", "Disponible en 5 g y 10 g"],
       img:"../assets/img/productos/montoc/m-polvo-suelto.webp",
+      imgs:["../assets/img/productos/montoc/m-polvo-suelto.webp", "../assets/img/productos/montoc/m-polvo-suelto-sin-empaque.webp"],
       variantes:[{talla:"Única", stock:4}]
     },
     {
@@ -59,6 +62,7 @@ window.SB_TIENDA = {
       detalle:"Tu aliado para un acabado mate y sin imperfecciones. Este polvo suelto traslúcido se funde con tu piel, absorbe el exceso de grasa y controla el brillo durante horas sin alterar el color de tu maquillaje. Su fórmula micro-pulverizada deja un efecto aterciopelado y no deja efecto blanco en fotos con flash.",
       caracteristicas:["Absorbe el exceso de grasa y controla el brillo durante horas", "Neutraliza rojeces y equilibra el tono", "Efecto aterciopelado, sin efecto blanco en fotos con flash", "Indicado para pieles grasas y mixtas", "Se adapta a cualquier tono de piel", "Disponible en 5 g y 10 g"],
       img:"../assets/img/productos/montoc/m-polvo-suelto.webp",
+      imgs:["../assets/img/productos/montoc/m-polvo-suelto.webp", "../assets/img/productos/montoc/m-polvo-suelto-sin-empaque.webp"],
       variantes:[{talla:"Única", stock:6}]
     },
     {
@@ -198,6 +202,83 @@ window.SB_TIENDA = {
       caracteristicas:["Aplicador de pestañas postizas"],
       img:"../assets/img/productos/montoc/m-pinza-pestanas.webp",
       variantes:[{talla:"Única", stock:4}]
+    },
+    {
+      id:"e-spray-fijador", cat:"rostro", marca:"Elaya", name:"Spray Fijador de Maquillaje", price:32900, icon:"bottle",
+      desc:"Bruma microfina de alta fijación, ultra ligera.",
+      detalle:"Bruma microfina de alta fijación y ultra ligera. Sella base, correctores y polvos, controla el brillo y protege tu look del calor, el sudor y la humedad, sin sensación pegajosa. Aguanta hasta la lluvia.",
+      caracteristicas:["Alta fijación, ultra ligero", "Sella base, correctores y polvos", "Controla el brillo", "Protege del calor, el sudor y la humedad", "Sin sensación pegajosa", "Atomizador finísimo y aroma fresco", "No reseca"],
+      img:"../assets/img/productos/elaya/e-spray-fijador.webp",
+      variantes:[{talla:"Única", stock:12}]
+    },
+    {
+      id:"e-iluminador-corporal", cat:"rostro", marca:"Elaya", name:"Iluminador Corporal en Spray", price:22900, icon:"bottle",
+      desc:"Iluminador líquido en spray con destellos microfinos.",
+      detalle:"Iluminador líquido en spray con destellos microfinos. Aplícalo en piernas, brazos, escote y hombros para una luminosidad tridimensional que realza tu piel. Ideal para fiestas, eventos y días de playa.",
+      caracteristicas:["Destellos microfinos", "Luminosidad tridimensional", "Para piernas, brazos, escote y hombros", "Se absorbe súper rápido", "Cero grasoso ni pegajoso", "Se fija a la piel"],
+      img:"../assets/img/productos/elaya/e-iluminador-corporal.webp",
+      imgs:["../assets/img/productos/elaya/e-iluminador-corporal.webp", "../assets/img/productos/elaya/e-iluminador-corporal-champagne.webp"],
+      variantes:[{talla:"Champaña Perlado", stock:2}, {talla:"Dorado", stock:9}]
+    },
+    {
+      id:"e-polvo-blur", cat:"rostro", marca:"Elaya", name:"Polvo Blur Neutralizador", price:21900, icon:"compact",
+      desc:"Polvo ultra fino con efecto filtro blur.",
+      detalle:"Polvo ultra fino con efecto filtro blur. Sella el maquillaje, neutraliza imperfecciones, suaviza poros y líneas de expresión y controla el brillo todo el día. Acabado liso y aterciopelado, sin pesadez.",
+      caracteristicas:["Efecto filtro blur", "Sella y neutraliza imperfecciones", "Suaviza poros y líneas de expresión", "Controla el brillo todo el día", "Efecto mate impecable", "Textura ligerita", "Esfera compacta: llévalo en el bolso"],
+      img:"../assets/img/productos/elaya/e-polvo-blur.webp",
+      variantes:[{talla:"Única", stock:9}]
+    },
+    {
+      id:"e-polvo-suelto-traslucido", cat:"rostro", marca:"Elaya", name:"Polvo Suelto Traslúcido", price:25900, icon:"compact",
+      desc:"Polvo ultra fino de alta fijación que no aporta color.",
+      detalle:"Fórmula ultra fina de alta fijación que no aporta color. Sella base y corrector sin alterar el tono, controla el exceso de grasa y matifica. Acabado liso y aterciopelado que aguanta el sudor y el calor.",
+      caracteristicas:["Alta fijación, no aporta color", "Sella base y corrector sin alterar el tono", "Controla el exceso de grasa y matifica", "Ideal para baking", "Súper ligero, cero acartonado", "Se funde con la piel"],
+      img:"../assets/img/productos/elaya/e-polvo-suelto-traslucido.webp",
+      variantes:[{talla:"Única", stock:9}]
+    },
+    {
+      id:"e-polvo-suelto-color", cat:"rostro", marca:"Elaya", name:"Polvo Suelto con Color", price:25900, icon:"compact",
+      desc:"Polvo suelto con toque de color sutil y cobertura ligera.",
+      detalle:"A diferencia del traslúcido, este polvo sí aporta un toque de color sutil y cobertura ligera. Sella tu base o corrector, uniforma la piel y camufla imperfecciones. Controla el brillo y el sudor por horas, con acabado de filtro de porcelana.",
+      caracteristicas:["Toque de color sutil y cobertura ligera", "Uniforma y camufla imperfecciones", "Controla el brillo y el sudor por horas", "Acabado filtro de porcelana", "Ideal sin base pesada", "Piel aterciopelada, dura todo el día"],
+      img:"../assets/img/productos/elaya/e-polvo-suelto-color.webp",
+      imgs:["../assets/img/productos/elaya/e-polvo-suelto-color.webp", "../assets/img/productos/elaya/e-polvo-suelto-02.webp", "../assets/img/productos/elaya/e-polvo-suelto-03.webp", "../assets/img/productos/elaya/e-polvo-suelto-04.webp"],
+      variantes:[{talla:"Tono 02", stock:4}, {talla:"Tono 03", stock:4}, {talla:"Tono 04", stock:4}]
+    },
+    {
+      id:"e-rubor-cristal", cat:"rostro", marca:"Elaya", name:"Rubor Cristal", price:21900, icon:"lipstick",
+      desc:"Rubor en barra que se adapta a tu piel.",
+      detalle:"Rubor en barra cristalina que se adapta a tu piel: con el calor y el pH se transforma en un rosado personalizado y natural. Hidrata y deja un acabado jugoso y fresco. Se difumina en segundos y es de larga duración, sin transferencia.",
+      caracteristicas:["Se adapta a tu piel: rosado personalizado", "Hidrata, acabado jugoso y fresco", "Se difumina en segundos", "Larga duración, sin transferencia", "Súper ligerito", "Barra de 8 g"],
+      img:"../assets/img/productos/elaya/e-rubor-cristal.webp",
+      imgs:["../assets/img/productos/elaya/e-rubor-cristal.webp", "../assets/img/productos/elaya/e-rubor-cristal-sin-tapa.webp", "../assets/img/productos/elaya/e-rubor-cristal-sin-tapa-2.webp"],
+      variantes:[{talla:"Única", stock:23}]
+    },
+    {
+      id:"e-pestanina-bum", cat:"ojos", marca:"Elaya", name:"Pestañina Bum. Elaya", price:21900, icon:"mascara",
+      desc:"Pestañina resistente al agua de larga duración.",
+      detalle:"Pestañina resistente al agua de larga duración, con volumen definido y alargamiento extremo, pestaña por pestaña y sin pesadez. Aguanta lágrimas, sudor y humedad: negro intenso todo el día, sin correrse ni efecto ojo de mapache.",
+      caracteristicas:["Resistente al agua", "Volumen definido y alargamiento extremo", "Negro intenso todo el día", "Sin correrse ni efecto ojo de mapache", "Cepillo curvo", "Sin pesadez"],
+      img:"../assets/img/productos/elaya/e-pestanina-bum.webp",
+      imgs:["../assets/img/productos/elaya/e-pestanina-bum.webp", "../assets/img/productos/elaya/e-pestanina-bum-sin-tapa.webp"],
+      variantes:[{talla:"Única", stock:18}]
+    },
+    {
+      id:"e-delineador-liquido", cat:"ojos", marca:"Elaya", name:"Delineador Líquido", price:19900, icon:"eyeliner",
+      desc:"Delineador de alta pigmentación que no se corre.",
+      detalle:"Delineador de alta pigmentación y larga duración que no se corre. Negro ultra intenso que se fija de inmediato y resiste sudor y humedad, sin agrietarse. Su punta ultra fina y elástica traza desde líneas sutiles hasta delineados gráficos y dramáticos.",
+      caracteristicas:["Alta pigmentación, no se corre", "Negro ultra intenso", "Se fija de inmediato", "Resiste sudor y humedad, sin agrietarse", "Punta ultra fina y elástica"],
+      img:"../assets/img/productos/elaya/e-delineador-liquido.webp",
+      imgs:["../assets/img/productos/elaya/e-delineador-liquido.webp", "../assets/img/productos/elaya/e-delineador-liquido-empaque.webp"],
+      variantes:[{talla:"Única", stock:11}]
+    },
+    {
+      id:"e-desmaquillador-bifasico", cat:"cuidado", marca:"Elaya", name:"Desmaquillador Bifásico", price:21900, icon:"bottle",
+      desc:"Desmaquillador bifásico para rostro, ojos y labios.",
+      detalle:"Fórmula bifásica de doble acción para rostro, ojos y labios. Al agitarlo remueve fácil y en segundos hasta pestañinas a prueba de agua y labiales mate. Limpia a profundidad y mantiene la hidratación, sin sensación grasosa ni frotar duro.",
+      caracteristicas:["Doble acción para rostro, ojos y labios", "Quita pestañina waterproof y labiales mate", "Limpia a profundidad y mantiene la hidratación", "No reseca ni irrita", "Sin frotar duro", "200 ml"],
+      img:"../assets/img/productos/elaya/e-desmaquillador-bifasico.webp",
+      variantes:[{talla:"Única", stock:8}]
     }
   ]
 };

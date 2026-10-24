@@ -981,7 +981,8 @@ html.js-anim .reveal.is-in{opacity:1;transform:none;}
 .card:hover .card-img{transform:scale(1.04);}
 .tienda-mujer .card-img{box-sizing:border-box;padding:14px;object-fit:contain;}
 .tienda-mujer .card-img[src*="m-dixy-fix-10ml"],
-.tienda-mujer .card-img[src*="Dixy-Fix-x30ml-Montoc"]{mix-blend-mode:multiply;}
+.tienda-mujer .card-img[src*="Dixy-Fix-x30ml-Montoc"],
+.tienda-mujer .card-img[src*="/productos/elaya/"]{mix-blend-mode:multiply;}
 .card-art > .card-cat,.card-art > .fav-toggle{z-index:1;}
 /* "Agregar al carrito" se acorta a "Agregar" cuando la tarjeta es angosta */
 .card-foot{container-type:inline-size;}
@@ -1060,7 +1061,8 @@ html.js-anim .reveal.is-in{opacity:1;transform:none;}
 .pv-main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
 .tienda-mujer .pv-main img{box-sizing:border-box;padding:16px;object-fit:contain;}
 .tienda-mujer .pv-main img[src*="m-dixy-fix-10ml"],
-.tienda-mujer .pv-main img[src*="Dixy-Fix-x30ml-Montoc"]{mix-blend-mode:multiply;}
+.tienda-mujer .pv-main img[src*="Dixy-Fix-x30ml-Montoc"],
+.tienda-mujer .pv-main img[src*="/productos/elaya/"]{mix-blend-mode:multiply;}
 .pv-main .card-cat{position:absolute;top:1rem;left:1rem;z-index:1;}
 .pv-thumbs{display:flex;gap:.55rem;overflow-x:auto;scrollbar-width:none;flex:none;}
 .pv-thumbs::-webkit-scrollbar{display:none;}
