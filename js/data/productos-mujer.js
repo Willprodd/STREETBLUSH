@@ -279,6 +279,84 @@ window.SB_TIENDA = {
       caracteristicas:["Doble acción para rostro, ojos y labios", "Quita pestañina waterproof y labiales mate", "Limpia a profundidad y mantiene la hidratación", "No reseca ni irrita", "Sin frotar duro", "200 ml"],
       img:"../assets/img/productos/elaya/e-desmaquillador-bifasico.webp",
       variantes:[{talla:"Única", stock:8}]
+    },
+    {
+      id:"b-bloom-browtiful", cat:"cejas", marca:"Bloomshell", name:"Bloom Browtiful", price:17900, icon:"eyeliner",
+      desc:"Producto para cejas de Bloomshell.",
+      detalle:"Bloom Browtiful, producto para cejas de la marca Bloomshell.",
+      img:"../assets/img/productos/bloomshell/b-bloom-browtiful.webp",
+      variantes:[{talla:"Única", stock:10}]
+    },
+    {
+      id:"b-bloom-filter-premium", cat:"rostro", marca:"Bloomshell", name:"Bloom Filter Línea Premium", price:39900, icon:"compact",
+      desc:"Polvo de la línea premium Bloom Filter.",
+      detalle:"Polvo de la línea premium Bloom Filter de Bloomshell, con borla incluida.",
+      img:"../assets/img/productos/bloomshell/b-bloom-filter-premium.webp",
+      variantes:[{talla:"Única", stock:10}]
+    },
+    {
+      id:"b-polvo-translucent-2en1", cat:"rostro", marca:"Bloomshell", name:"Polvo Translucent 2 en 1 Mini", price:41900, icon:"compact",
+      desc:"Polvo translúcido 2 en 1: uno compacto para matificar y uno suelto para sellar.",
+      detalle:"Dos polvos en un solo estuche con espejo: un polvo compacto para matificar y un polvo suelto para sellar tu maquillaje. De textura ultraligera, con vitamina E y concha de nácar que hidratan y protegen tu piel, y fórmula sin flashback para un acabado mate todo el día.",
+      caracteristicas:["2 en 1: compacto para matificar y suelto para sellar", "Acabado mate todo el día", "Textura ultraligera", "Sin flashback", "Con vitamina E y concha de nácar", "Presentación mini con espejo"],
+      img:"../assets/img/productos/bloomshell/b-polvo-translucent-2en1.webp",
+      variantes:[{talla:"Única", stock:9}]
+    },
+    {
+      id:"b-polvo-suelto-mini-mate", cat:"rostro", marca:"Bloomshell", name:"Polvo Suelto Translucent Mini Mate", price:30300, icon:"compact",
+      desc:"Mini polvo suelto translúcido de acabado mate.",
+      detalle:"Polvo suelto translúcido ideal para sellar la base y el corrector. De fórmula ligera que se distribuye fácilmente, controla el brillo y deja un acabado mate y suave. Incluye borla y su tamaño mini cabe en tu bolso para retoques durante el día.",
+      caracteristicas:["Sella base y corrector", "Controla el brillo", "Acabado mate y suave", "Fórmula ligera", "Incluye borla", "Tamaño mini para tu bolso"],
+      img:"../assets/img/productos/bloomshell/b-polvo-suelto-mini-mate.webp",
+      variantes:[{talla:"01", stock:9}]
+    },
+    {
+      id:"b-duo-mimosa-llavero", cat:"labios", marca:"Bloomshell", name:"Dúo Mimosa Llavero", price:26400, icon:"lipstick",
+      desc:"Dúo para labios en formato llavero.",
+      detalle:"Dúo Mimosa de Bloomshell para labios, en formato llavero.",
+      img:"../assets/img/productos/bloomshell/b-duo-mimosa-llavero.webp",
+      variantes:[{talla:"Única", stock:2}]
+    },
+    {
+      id:"b-my-concealer", cat:"rostro", marca:"Bloomshell", name:"My Concealer", price:19900, icon:"bottle",
+      desc:"Corrector de ojeras de cobertura media/alta que cuida e hidrata.",
+      detalle:"Corrector de ojeras de cobertura media/alta que cubre y cuida tu piel al mismo tiempo. De textura ligera, no se siente densa, seca ni pesada, y puedes aplicar las capas que necesites. Su fórmula tiene ácido hialurónico y vitamina E, y está dermatológicamente probada.",
+      caracteristicas:["Cobertura media/alta", "Cuida e hidrata", "Con ácido hialurónico y vitamina E", "Textura ligera, capas que necesites", "Dermatológicamente probado", "5 tonos"],
+      img:"../assets/img/productos/bloomshell/b-my-concealer-4.5.webp",
+      imgs:["../assets/img/productos/bloomshell/b-my-concealer-4.5.webp", "../assets/img/productos/bloomshell/b-my-concealer-01.webp", "../assets/img/productos/bloomshell/b-my-concealer-02.webp", "../assets/img/productos/bloomshell/b-my-concealer-03.webp", "../assets/img/productos/bloomshell/b-my-concealer-04.webp"],
+      variantes:[
+        {talla:"01 Natural", stock:0}, {talla:"02 Beige", stock:0}, {talla:"03 Vainilla", stock:0},
+        {talla:"04 Ivory", stock:0}, {talla:"4.5", stock:6}
+      ]
+    },
+    {
+      id:"b-delineador-noir", cat:"ojos", marca:"Bloomshell", name:"Delineador para Ojos Noir", price:18900, icon:"eyeliner",
+      desc:"Eyeliner Blooming Noir de Bloomshell.",
+      detalle:"Eyeliner Blooming Noir de Bloomshell, en tono negro.",
+      img:"../assets/img/productos/bloomshell/b-delineador-noir.webp",
+      variantes:[{talla:"Única", stock:9}]
+    },
+    {
+      id:"b-lapiz-eyebrow", cat:"cejas", marca:"Bloomshell", name:"Lápiz Bloom Definer Eyebrow", price:12800, icon:"eyeliner",
+      desc:"Lápiz de cejas con cepillo.",
+      detalle:"Lápiz Bloom Definer Eyebrow de Bloomshell, con cepillo para peinar las cejas.",
+      img:"../assets/img/productos/bloomshell/b-lapiz-eyebrow.webp",
+      variantes:[{talla:"Única", stock:9}]
+    },
+    {
+      id:"b-lip-coconut", cat:"labios", marca:"Bloomshell", name:"Bloom Lip Coco Nut", price:15800, icon:"lipstick",
+      desc:"Aceite labial de coco que hidrata y da brillo natural.",
+      detalle:"Aceite labial ligero enriquecido con aceite de coco que hidrata, nutre y embellece tus labios, con un brillo natural sin sensación pegajosa. Con aroma tropical a coco, es ideal para labios secos. Úsalo solo o sobre tu labial para potenciar el brillo.",
+      caracteristicas:["Hidrata y nutre", "Con aceite de coco", "Brillo natural, sin sensación pegajosa", "Aroma tropical a coco", "Úsalo solo o sobre tu labial", "5 ml"],
+      img:"../assets/img/productos/bloomshell/b-lip-coconut.webp",
+      variantes:[{talla:"Única", stock:24}]
+    },
+    {
+      id:"b-bronzer-tropical", cat:"rostro", marca:"Bloomshell", name:"Bloom Tropical Luminous Bronzer Compacto 2 en 1", price:31500, icon:"compact",
+      desc:"Bronzer compacto 2 en 1 con espejo.",
+      detalle:"Bronzer compacto 2 en 1 de la línea Tropical Luminous de Bloomshell, con espejo. Tono 01.",
+      img:"../assets/img/productos/bloomshell/b-bronzer-tropical-01.webp",
+      variantes:[{talla:"01", stock:11}]
     }
   ]
 };

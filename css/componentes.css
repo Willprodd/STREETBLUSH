@@ -983,6 +983,11 @@ html.js-anim .reveal.is-in{opacity:1;transform:none;}
 .tienda-mujer .card-img[src*="m-dixy-fix-10ml"],
 .tienda-mujer .card-img[src*="Dixy-Fix-x30ml-Montoc"],
 .tienda-mujer .card-img[src*="/productos/elaya/"]{mix-blend-mode:multiply;}
+.tienda-mujer .card-img[src*="/productos/bloomshell/"]{padding:0;object-fit:cover;}
+.tienda-mujer .card-img[src*="/productos/bloomshell/b-bloom-browtiful"],
+.tienda-mujer .card-img[src*="/productos/bloomshell/b-lapiz-eyebrow"],
+.tienda-mujer .card-img[src*="/productos/bloomshell/b-polvo-suelto-mini-mate"],
+.tienda-mujer .card-img[src*="/productos/bloomshell/b-polvo-translucent-2en1"]{padding:14px;object-fit:contain;mix-blend-mode:multiply;}
 .card-art > .card-cat,.card-art > .fav-toggle{z-index:1;}
 /* "Agregar al carrito" se acorta a "Agregar" cuando la tarjeta es angosta */
 .card-foot{container-type:inline-size;}
@@ -1063,6 +1068,11 @@ html.js-anim .reveal.is-in{opacity:1;transform:none;}
 .tienda-mujer .pv-main img[src*="m-dixy-fix-10ml"],
 .tienda-mujer .pv-main img[src*="Dixy-Fix-x30ml-Montoc"],
 .tienda-mujer .pv-main img[src*="/productos/elaya/"]{mix-blend-mode:multiply;}
+.tienda-mujer .pv-main img[src*="/productos/bloomshell/"]{padding:0;object-fit:cover;}
+.tienda-mujer .pv-main img[src*="/productos/bloomshell/b-bloom-browtiful"],
+.tienda-mujer .pv-main img[src*="/productos/bloomshell/b-lapiz-eyebrow"],
+.tienda-mujer .pv-main img[src*="/productos/bloomshell/b-polvo-suelto-mini-mate"],
+.tienda-mujer .pv-main img[src*="/productos/bloomshell/b-polvo-translucent-2en1"]{padding:14px;object-fit:contain;mix-blend-mode:multiply;}
 .pv-main .card-cat{position:absolute;top:1rem;left:1rem;z-index:1;}
 .pv-thumbs{display:flex;gap:.55rem;overflow-x:auto;scrollbar-width:none;flex:none;}
 .pv-thumbs::-webkit-scrollbar{display:none;}
