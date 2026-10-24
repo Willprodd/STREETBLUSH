@@ -53,6 +53,7 @@ window.SB_TIENDA = {
       detalle:"Tu aliado para un acabado mate y sin imperfecciones. Este polvo suelto traslúcido se funde con tu piel, absorbe el exceso de grasa y controla el brillo durante horas sin alterar el color de tu maquillaje. Su fórmula micro-pulverizada deja un efecto aterciopelado y no deja efecto blanco en fotos con flash.",
       caracteristicas:["Absorbe el exceso de grasa y controla el brillo durante horas", "Neutraliza rojeces y equilibra el tono", "Efecto aterciopelado, sin efecto blanco en fotos con flash", "Indicado para pieles grasas y mixtas", "Se adapta a cualquier tono de piel", "Disponible en 5 g y 10 g"],
       img:"../assets/img/productos/montoc/m-polvo-suelto.webp",
+      imgs:["../assets/img/productos/montoc/m-polvo-suelto.webp", "../assets/img/productos/montoc/m-polvo-suelto-sin-empaque.webp"],
       variantes:[{talla:"Única", stock:4}]
     },
     {
@@ -61,6 +62,7 @@ window.SB_TIENDA = {
       detalle:"Tu aliado para un acabado mate y sin imperfecciones. Este polvo suelto traslúcido se funde con tu piel, absorbe el exceso de grasa y controla el brillo durante horas sin alterar el color de tu maquillaje. Su fórmula micro-pulverizada deja un efecto aterciopelado y no deja efecto blanco en fotos con flash.",
       caracteristicas:["Absorbe el exceso de grasa y controla el brillo durante horas", "Neutraliza rojeces y equilibra el tono", "Efecto aterciopelado, sin efecto blanco en fotos con flash", "Indicado para pieles grasas y mixtas", "Se adapta a cualquier tono de piel", "Disponible en 5 g y 10 g"],
       img:"../assets/img/productos/montoc/m-polvo-suelto.webp",
+      imgs:["../assets/img/productos/montoc/m-polvo-suelto.webp", "../assets/img/productos/montoc/m-polvo-suelto-sin-empaque.webp"],
       variantes:[{talla:"Única", stock:6}]
     },
     {
