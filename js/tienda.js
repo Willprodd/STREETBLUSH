@@ -38,6 +38,14 @@
     }).map(p => {
       const catInfo = p.cat ? categorias.find(c => c.id === p.cat) : null;
       const categoriaNombre = catInfo ? catInfo.nombre : tienda.categoria;
+      // variantes: tonos/sabores con stock propio (maquillaje). Si no hay, se usa
+      // el mecanismo de tallas de ropa tal cual existía antes.
+      const stockPorTalla = Array.isArray(p.variantes) && p.variantes.length
+        ? Object.fromEntries(p.variantes.map(v => [v.talla, v.stock]))
+        : null;
+      const tallas = stockPorTalla
+        ? p.variantes.map(v => v.talla)
+        : (esRopa ? (p.talla ? [p.talla] : (p.tallas || tienda.tallas || [])) : []);
       return {
         ...p,
         id: String(p.id),
@@ -48,16 +56,28 @@
         imgs: (Array.isArray(p.imgs) && p.imgs.length ? p.imgs : [p.img]).filter(Boolean),
         icon: SB.ICONS[p.icon] ? p.icon : (esRopa ? "hoodie" : "lipstick"),
         categoriaNombre,
+        marca: p.marca || "",
+        varianteLabel: p.etiquetaVariante || "Tono",
+        stockPorTalla,
         // "Ropa" hace que el carrito pida talla; en maquillaje viaja la categoría (Labios, Rubores…)
         categoriaCarrito: esRopa ? "Ropa" : categoriaNombre,
-        tallas: esRopa ? (p.talla ? [p.talla] : (p.tallas || tienda.tallas || [])) : []
+        tallas
       };
     });
+  }
+
+  // Suma el stock de todas las variantes de un producto (null si no se controla stock)
+  function stockTotal(p){
+    return p.stockPorTalla ? Object.values(p.stockPorTalla).reduce((a, b) => a + b, 0) : null;
   }
 
   let favOnly = false;
   let query = "";
   let cat = "";   // "" = todas las categorías
+  let marca = ""; // "" = todas las marcas
+
+  // Filtro de marca: solo tiene sentido mostrarlo si hay 2 o más marcas distintas
+  const marcas = [...new Set(products.map(p => p.marca).filter(Boolean))].sort();
 
   const grid = document.getElementById("grid");
   const newDropGrid = document.getElementById("newDropGrid");
@@ -65,6 +85,21 @@
   const searchInput = document.getElementById("searchInput");
   const catalogo = document.getElementById("catalogo");
   const catList = document.getElementById("catList");     // opcional: círculos de categorías
+  const shopTools = document.querySelector(".shop-tools");
+  let marcaSelect = null;
+  if (shopTools && marcas.length > 1){
+    marcaSelect = document.createElement("select");
+    marcaSelect.id = "marcaFilter";
+    marcaSelect.className = "marca-filter";
+    marcaSelect.setAttribute("aria-label", "Filtrar por marca");
+    marcaSelect.innerHTML = `<option value="">Todas las marcas</option>${marcas.map(m => `<option value="${esc(m)}">${esc(m)}</option>`).join("")}`;
+    shopTools.prepend(marcaSelect);
+    marcaSelect.addEventListener("change", () => {
+      marca = marcaSelect.value;
+      renderGrid(true);
+      SB.scrollToEl(catalogo);
+    });
+  }
   // El buscador puede estar en la cabecera (fuera del catálogo): entonces, al escribir, se baja al catálogo
   const searchOutside = !catalogo.contains(searchInput);
 
@@ -86,12 +121,19 @@
   // Datos que lee js/carrito.js al agregar (id, nombre, precio, talla, foto o icono)
   const datosCarrito = (p) => `data-id="${esc(p.id)}" data-nombre="${esc(p.name)}" data-precio="${p.price}" data-categoria="${esc(p.categoriaCarrito)}"
         data-talla="${esc(p.tallas.length === 1 ? p.tallas[0] : "")}" data-tallas="${esc(p.tallas.join("|"))}"
+        data-variante-label="${esc(p.varianteLabel)}"
         data-img="${esc(p.imgs[0] || "")}" data-icon="${esc(p.icon)}"`;
 
   const enCarrito = (p) => (SB.carrito ? SB.carrito.cantidadDe(p.name) : 0);
 
+  // Sin stock controlado: null. Con stock: agotado si el total es 0.
+  const agotado = (p) => p.stockPorTalla !== null && stockTotal(p) === 0;
+
   // Sin unidades en la bolsa: botón "Agregar". Con unidades: selector − cantidad +
   function agregarBtnHTML(p){
+    if (agotado(p)){
+      return `<button class="buy-btn" type="button" disabled aria-disabled="true">Agotado</button>`;
+    }
     const n = enCarrito(p);
     if (n > 0){
       return `
@@ -134,12 +176,23 @@
 
   // enDrop: la tarjeta va dentro de la sección New drop, donde la etiqueta sobra.
   // El nombre es un enlace que cubre la tarjeta y abre la vista del producto (js/producto.js).
+  // Insignia de stock: "Agotado" si no queda nada, "Últimas unidades" si la única
+  // variante (o la variante ya elegida) tiene 1 o 2. Con varias variantes sin elegir
+  // aún, el aviso detallado se ve en la vista del producto.
+  function stockBadgeHTML(p){
+    if (p.stockPorTalla === null) return "";
+    const total = stockTotal(p);
+    if (total === 0) return `<span class="card-cat is-agotado">Agotado</span>`;
+    if (p.tallas.length === 1 && total <= 2) return `<span class="card-cat is-ultimas">Últimas unidades</span>`;
+    return "";
+  }
+
   function cardHTML(p, i, animate, enDrop){
     const fav = favs.has(p.id);
     return `
       <article class="card${animate ? " card-enter" : ""}" style="--i:${i}" data-producto="${esc(p.id)}">
         <div class="card-art${p.imgs.length ? " has-img" : ""}">
-          ${p.drop && !enDrop ? `<span class="card-cat is-drop">${esc(etiquetaDrop)}</span>` : ""}
+          ${p.drop && !enDrop ? `<span class="card-cat is-drop">${esc(etiquetaDrop)}</span>` : stockBadgeHTML(p)}
           <button class="fav-toggle" type="button" data-fav="${esc(p.id)}" aria-pressed="${fav}" aria-label="${fav ? "Quitar de favoritos" : "Guardar en favoritos"}: ${esc(p.name)}">
             <svg viewBox="0 0 24 24" fill="${fav ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2" aria-hidden="true">${SB.HEART}</svg>
           </button>
@@ -190,6 +243,7 @@
   function renderGrid(animate){
     let items = products;
     if (cat) items = items.filter(p => p.cat === cat);
+    if (marca) items = items.filter(p => p.marca === marca);
     if (favOnly) items = items.filter(p => favs.has(p.id));
     const q = query.trim().toLowerCase();
     if (q) items = items.filter(p => [p.name, p.desc, p.categoriaNombre, p.detalle].join(" ").toLowerCase().includes(q));
@@ -219,6 +273,8 @@
     favOnly = false;
     query = "";
     cat = "";
+    marca = "";
+    if (marcaSelect) marcaSelect.value = "";
     searchInput.value = "";
     updateFavUI();
     updateCategoryUI();

@@ -208,7 +208,7 @@
 
           ${p.caracteristicas.length ? `
             <div class="pv-block">
-              <h3 class="pv-label">Detalles</h3>
+              <h3 class="pv-label">${document.body.classList.contains("tienda-mujer") ? "Beneficios" : "Detalles"}</h3>
               <ul class="pv-features">${p.caracteristicas.map(c => `<li>${esc(c)}</li>`).join("")}</ul>
             </div>` : ""}
 
@@ -243,23 +243,36 @@
     actualizarCantidad();
   }
 
-  // Tallas justo debajo del precio (solo ropa). La guía de tallas solo aplica a S–XL:
-  // los jeans (tallas numéricas) no la muestran.
+  // Tallas/variantes justo debajo del precio. La guía de tallas solo aplica a ropa S–XL:
+  // los jeans (tallas numéricas) y el maquillaje (sin stockPorTalla) no la muestran.
   function tallasHTML(p){
     if (!p.tallas.length) return "";
+    const etiqueta = p.varianteLabel || "Talla";
     return `
       <fieldset class="pv-block pv-sizes">
-        <legend class="pv-label">Talla: <span id="pvTallaActual">${esc(talla) || "elige una"}</span></legend>
+        <legend class="pv-label">${esc(etiqueta)}: <span id="pvTallaActual">${esc(talla) || "elige una"}</span></legend>
         <div class="pv-size-list">
-          ${p.tallas.map(t => `
-            <label class="pv-size">
-              <input type="radio" name="pvTalla" value="${esc(t)}"${t === talla ? " checked" : ""} aria-describedby="pvTallaError">
-              <span>${esc(t)}</span>
-            </label>`).join("")}
+          ${p.tallas.map(t => {
+            const stock = p.stockPorTalla ? p.stockPorTalla[t] : undefined;
+            const agotada = stock === 0;
+            const nota = agotada ? " (Agotado)" : (stock === 1 || stock === 2 ? " (Últimas unidades)" : "");
+            return `
+            <label class="pv-size${agotada ? " is-disabled" : ""}">
+              <input type="radio" name="pvTalla" value="${esc(t)}"${t === talla ? " checked" : ""}${agotada ? " disabled" : ""} aria-describedby="pvTallaError">
+              <span>${esc(t)}${esc(nota)}</span>
+            </label>`;
+          }).join("")}
         </div>
-        <p class="cart-error" id="pvTallaError" hidden>Elige una talla para agregarlo.</p>
-        ${p.tallas.length > 1 && isNaN(p.tallas[0]) ? `<button class="sg-link" type="button" data-pv="guia">Ver guía de tallas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>` : ""}
+        <p class="cart-error" id="pvTallaError" hidden>Elige ${p.varianteLabel ? "una opción" : "una talla"} para agregarlo.</p>
+        ${!p.stockPorTalla && p.tallas.length > 1 && isNaN(p.tallas[0]) ? `<button class="sg-link" type="button" data-pv="guia">Ver guía de tallas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>` : ""}
       </fieldset>`;
+  }
+
+  // Stock disponible para la talla/variante elegida (Infinity si no hay control de stock)
+  function stockElegido(p){
+    if (!p.stockPorTalla) return Infinity;
+    const stock = p.stockPorTalla[talla];
+    return stock === undefined ? Infinity : stock;
   }
 
   function actualizarCantidad(){
@@ -270,7 +283,7 @@
     const menos = dialogo.querySelector('[data-pv="menos"]');
     const mas = dialogo.querySelector('[data-pv="mas"]');
     if (menos) menos.disabled = cantidad <= 1;
-    if (mas) mas.disabled = cantidad >= CANTIDAD_MAX;
+    if (mas) mas.disabled = cantidad >= Math.min(CANTIDAD_MAX, stockElegido(producto));
   }
 
   function agregar(){
@@ -285,7 +298,9 @@
       }
       return;
     }
-    window.agregarAlCarrito(p.name, p.price, p.categoriaCarrito, talla, cantidad, p.tallas, {img: p.imgs[0], icon: p.icon}, p.id);
+    if (stockElegido(p) === 0) return;
+    cantidad = Math.min(cantidad, stockElegido(p));
+    window.agregarAlCarrito(p.name, p.price, p.categoriaCarrito, talla, cantidad, p.tallas, {img: p.imgs[0], icon: p.icon}, p.id, p.varianteLabel);
 
     // Confirmación en el mismo botón; la cantidad vuelve a 1 para el siguiente
     const texto = dialogo.querySelector(".pv-add-text");
@@ -313,7 +328,7 @@
       case "cerrar": cerrar(); break;
       case "guia": abrirGuia(); break;
       case "menos": cantidad = Math.max(1, cantidad - 1); actualizarCantidad(); break;
-      case "mas": cantidad = Math.min(CANTIDAD_MAX, cantidad + 1); actualizarCantidad(); break;
+      case "mas": cantidad = Math.min(CANTIDAD_MAX, stockElegido(producto), cantidad + 1); actualizarCantidad(); break;
       case "agregar": agregar(); break;
       case "foto": {
         imagen = Number(el.dataset.k);
@@ -342,6 +357,8 @@
     const error = dialogo.querySelector("#pvTallaError");
     if (error) error.hidden = true;
     dialogo.querySelector(".pv-sizes").classList.remove("is-invalid");
+    cantidad = Math.min(cantidad, Math.max(1, stockElegido(producto)));
+    actualizarCantidad();
   });
 
   document.addEventListener("keydown", (e) => {
