@@ -37,7 +37,18 @@
     return l && typeof l.nombre === "string" && Number.isFinite(l.precio) && l.cantidad > 0;
   }
   const esRopa = (linea) => linea.categoria === CATEGORIA_ROPA;
+  // Tiene variante (talla de ropa, o tono/sabor/tamaño de maquillaje) si el producto
+  // ofrece opciones para elegir, sin importar si es ropa o no.
+  const tieneVariante = (linea) => Array.isArray(linea.tallas) && linea.tallas.length > 0;
   const mismaLinea = (a, b) => a.nombre === b.nombre && a.talla === b.talla;
+  // Stock restante de la variante elegida de una línea (Infinity si no se controla stock)
+  function stockDe(linea){
+    if (!linea.id || !SB.catalogo) return Infinity;
+    const p = SB.catalogo.buscar(linea.id);
+    if (!p || !p.stockPorTalla) return Infinity;
+    const stock = p.stockPorTalla[linea.talla];
+    return stock === undefined ? Infinity : stock;
+  }
   const esc = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
   /* ---------- Lógica del carrito ---------- */
@@ -45,17 +56,19 @@
   // y tallas guarda las opciones del producto para el selector de la bolsa.
   // media = {img, icon}: la foto o el icono que se ve en la bolsa
   // id: id real del producto en el catálogo (para relacionar el pedido en Supabase)
-  function agregarAlCarrito(nombre, precio, categoria, talla, cantidad = 1, tallas = [], media = {}, id = ""){
+  function agregarAlCarrito(nombre, precio, categoria, talla, cantidad = 1, tallas = [], media = {}, id = "", varianteLabel = ""){
     cantidad = Math.max(1, parseInt(cantidad, 10) || 1);
     if (!nombre || !Number.isFinite(precio)) return;
     const nueva = {nombre, precio, cantidad, categoria: categoria || "", talla: talla || ""};
     if (id) nueva.id = id;
     if (tallas.length) nueva.tallas = tallas;
+    if (varianteLabel) nueva.varianteLabel = varianteLabel;
     if (media.img) nueva.img = media.img;
     if (media.icon) nueva.icon = media.icon;
     const existente = carrito.find(l => mismaLinea(l, nueva));
     if (existente){
       existente.cantidad += cantidad;
+      existente.cantidad = Math.min(existente.cantidad, stockDe(existente));
       if (!existente.img && nueva.img) existente.img = nueva.img;
       if (!existente.icon && nueva.icon) existente.icon = nueva.icon;
       if (!existente.id && nueva.id) existente.id = nueva.id;
@@ -70,7 +83,7 @@
   function cambiarCantidad(i, delta){
     const linea = carrito[i];
     if (!linea) return;
-    linea.cantidad += delta;
+    linea.cantidad = Math.min(linea.cantidad + delta, stockDe(linea));
     if (linea.cantidad < 1) carrito.splice(i, 1);
     persistir();
     renderCarrito();
@@ -99,9 +112,11 @@
     const gemela = carrito.find((l, k) => k !== i && l.nombre === linea.nombre && l.talla === talla);
     if (gemela){
       gemela.cantidad += linea.cantidad;
+      gemela.cantidad = Math.min(gemela.cantidad, stockDe(gemela));
       carrito.splice(i, 1);
     } else {
       linea.talla = talla;
+      linea.cantidad = Math.min(linea.cantidad, stockDe(linea));
     }
     persistir();
     renderCarrito();
@@ -125,7 +140,8 @@
   /* ---------- Mensaje y envío ---------- */
   function generarMensajeWhatsApp(){
     const lineas = carrito.map(l => {
-      const detalle = esRopa(l) ? `Talla: ${l.talla || "por definir"}` : l.categoria;
+      const etiqueta = esRopa(l) ? "Talla" : (l.varianteLabel || "Tono");
+      const detalle = tieneVariante(l) ? `${etiqueta}: ${l.talla || "por definir"}` : l.categoria;
       return `- ${l.nombre}${detalle ? ` (${detalle})` : ""} x ${l.cantidad} = ${SB.money(l.precio * l.cantidad)}`;
     });
     const partes = [
@@ -170,7 +186,7 @@
     return errores;
   }
 
-  const lineasSinTalla = () => carrito.map((l, i) => i).filter(i => esRopa(carrito[i]) && !carrito[i].talla);
+  const lineasSinTalla = () => carrito.map((l, i) => i).filter(i => tieneVariante(carrito[i]) && !carrito[i].talla);
 
   function enviarPedido(){
     if (!carrito.length){ irAPaso("items"); return false; }
@@ -336,10 +352,10 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" height="14" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
                 </button>
               </div>
-              ${esRopa(l) ? tallaHTML(l, i) : ""}
+              ${tieneVariante(l) ? tallaHTML(l, i) : ""}
               <button class="cart-remove" type="button" data-cart="quitar" data-i="${i}" aria-label="Quitar ${esc(l.nombre)} de la bolsa">Quitar</button>
             </div>
-            ${esRopa(l) ? `<p class="cart-error" id="cartTallaError${i}" hidden>Elige la talla antes de continuar.</p>` : ""}
+            ${tieneVariante(l) ? `<p class="cart-error" id="cartTallaError${i}" hidden>Elige ${esRopa(l) ? "la talla" : "la variante"} antes de continuar.</p>` : ""}
           </li>`).join("")}
       </ul>`;
 
@@ -351,14 +367,16 @@
 
   function tallaHTML(l, i){
     const opciones = Array.isArray(l.tallas) && l.tallas.length ? l.tallas : TALLAS_ROPA;
-    // Productos de talla única (ej. gorras) llegan con la talla ya puesta
-    if (opciones.length === 1 || (l.talla && !opciones.includes(l.talla))) return `<span class="cart-size-fixed">Talla ${esc(l.talla || opciones[0])}</span>`;
+    const etiqueta = esRopa(l) ? "Talla" : (l.varianteLabel || "Tono");
+    // Productos de talla/variante única (ej. gorras, o maquillaje de una sola presentación) llegan con la opción ya puesta
+    if (opciones.length === 1 || (l.talla && !opciones.includes(l.talla))) return `<span class="cart-size-fixed">${esc(etiqueta)} ${esc(l.talla || opciones[0])}</span>`;
+    const stockOpcion = (t) => l.id && SB.catalogo ? (SB.catalogo.buscar(l.id)?.stockPorTalla?.[t]) : undefined;
     return `
       <label class="cart-size">
-        <span class="sr-only">Talla de ${esc(l.nombre)}</span>
+        <span class="sr-only">${esc(etiqueta)} de ${esc(l.nombre)}</span>
         <select data-cart="talla" data-i="${i}" aria-describedby="cartTallaError${i}">
-          <option value=""${l.talla ? "" : " selected"}>Talla</option>
-          ${opciones.map(t => `<option value="${esc(t)}"${t === l.talla ? " selected" : ""}>${esc(t)}</option>`).join("")}
+          <option value=""${l.talla ? "" : " selected"}>${esc(etiqueta)}</option>
+          ${opciones.map(t => `<option value="${esc(t)}"${t === l.talla ? " selected" : ""}${stockOpcion(t) === 0 ? " disabled" : ""}>${esc(t)}${stockOpcion(t) === 0 ? " (Agotado)" : ""}</option>`).join("")}
         </select>
       </label>`;
   }
@@ -496,7 +514,7 @@
     const categoria = btn.dataset.categoria || "";
     const talla = btn.dataset.talla || "";
     const tallas = btn.dataset.tallas ? btn.dataset.tallas.split("|") : [];
-    agregarAlCarrito(nombre, precio, categoria, talla, 1, tallas, {img: btn.dataset.img, icon: btn.dataset.icon}, btn.dataset.id || "");
+    agregarAlCarrito(nombre, precio, categoria, talla, 1, tallas, {img: btn.dataset.img, icon: btn.dataset.icon}, btn.dataset.id || "", btn.dataset.varianteLabel || "");
   });
 
   if (bagBtn){
