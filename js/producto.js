@@ -208,7 +208,7 @@
 
           ${p.caracteristicas.length ? `
             <div class="pv-block">
-              <h3 class="pv-label">Detalles</h3>
+              <h3 class="pv-label">${document.body.classList.contains("tienda-mujer") ? "Beneficios" : "Detalles"}</h3>
               <ul class="pv-features">${p.caracteristicas.map(c => `<li>${esc(c)}</li>`).join("")}</ul>
             </div>` : ""}
 

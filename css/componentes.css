@@ -979,6 +979,9 @@ html.js-anim .reveal.is-in{opacity:1;transform:none;}
 .card-art.has-img::before{display:none;}
 .card-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease-out);}
 .card:hover .card-img{transform:scale(1.04);}
+.tienda-mujer .card-img{box-sizing:border-box;padding:14px;object-fit:contain;}
+.tienda-mujer .card-img[src*="m-dixy-fix-10ml"],
+.tienda-mujer .card-img[src*="Dixy-Fix-x30ml-Montoc"]{mix-blend-mode:multiply;}
 .card-art > .card-cat,.card-art > .fav-toggle{z-index:1;}
 /* "Agregar al carrito" se acorta a "Agregar" cuando la tarjeta es angosta */
 .card-foot{container-type:inline-size;}
@@ -1055,6 +1058,9 @@ html.js-anim .reveal.is-in{opacity:1;transform:none;}
 .pv-main.has-img::before{display:none;}
 .pv-main > svg{width:min(34%,190px);height:auto;color:var(--rose-deep);}
 .pv-main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.tienda-mujer .pv-main img{box-sizing:border-box;padding:16px;object-fit:contain;}
+.tienda-mujer .pv-main img[src*="m-dixy-fix-10ml"],
+.tienda-mujer .pv-main img[src*="Dixy-Fix-x30ml-Montoc"]{mix-blend-mode:multiply;}
 .pv-main .card-cat{position:absolute;top:1rem;left:1rem;z-index:1;}
 .pv-thumbs{display:flex;gap:.55rem;overflow-x:auto;scrollbar-width:none;flex:none;}
 .pv-thumbs::-webkit-scrollbar{display:none;}
@@ -1073,6 +1079,8 @@ html.js-anim .reveal.is-in{opacity:1;transform:none;}
 .pv-features{display:grid;gap:.5rem;margin:0;padding:0;list-style:none;}
 .pv-features li{position:relative;padding-left:1.15rem;font-size:.92rem;line-height:1.5;color:var(--ink-soft);}
 .pv-features li::before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--rose);}
+.tienda-mujer .pv-features li{padding-left:0;display:flex;gap:.5rem;}
+.tienda-mujer .pv-features li::before{content:"✓";position:static;width:auto;height:auto;border-radius:0;background:none;color:var(--rose-deep);font-weight:700;flex:none;}
 
 .pv-sizes{min-width:0;margin-inline:0;margin-bottom:0;padding-inline:0;padding-bottom:0;border-inline:none;border-bottom:none;}
 .pv-sizes legend{float:left;width:100%;padding:0;}
