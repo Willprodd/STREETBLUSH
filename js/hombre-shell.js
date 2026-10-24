@@ -166,6 +166,11 @@
               <input type="email" id="newsEmail" name="email" placeholder="tu@correo.com" autocomplete="email" required aria-describedby="newsHint">
               <button class="hb-btn hb-btn-dark" type="submit">Suscribirme</button>
             </div>
+            <label class="hb-news-consent">
+              <input type="checkbox" id="newsConsentimiento" required>
+              Acepto la <a href="../hombre/politicas.html#privacidad" target="_blank" rel="noopener">política de privacidad</a> para recibir avisos de drops.
+            </label>
+            <p class="hb-news-error" id="newsConsentimientoError" hidden>Debes aceptar la política de privacidad para continuar.</p>
             <p class="hb-news-hint" id="newsHint" data-news-hint>Al suscribirte se abre WhatsApp con tu correo para confirmar.</p>
           </form>
         </div>
@@ -234,7 +239,12 @@
             <form class="hb-news-form" data-newsletter novalidate>
               <label class="sr-only" for="popupEmail">Correo electrónico</label>
               <input type="email" id="popupEmail" name="email" placeholder="tu@correo.com" autocomplete="email" required aria-describedby="popupHint">
-              <button class="hb-btn hb-btn-dark hb-btn-block" type="submit">Avisarme</button>
+              <label class="hb-news-consent">
+                <input type="checkbox" id="popupConsentimiento" required>
+                Acepto la <a href="../hombre/politicas.html#privacidad" target="_blank" rel="noopener">política de privacidad</a>.
+              </label>
+              <p class="hb-news-error" id="popupConsentimientoError" hidden>Debes aceptar la política de privacidad para continuar.</p>
+              <button class="hb-btn hb-btn-dark hb-btn-block" type="submit" id="popupAvisarmeBtn" disabled aria-disabled="true">Avisarme</button>
               <p class="hb-news-hint" id="popupHint" data-news-hint>Se abre WhatsApp con tu correo para confirmar.</p>
             </form>
             <button class="hb-popup-skip" type="button" data-popup-close>Ahora no</button>

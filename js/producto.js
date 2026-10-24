@@ -285,7 +285,7 @@
       }
       return;
     }
-    window.agregarAlCarrito(p.name, p.price, p.categoriaCarrito, talla, cantidad, p.tallas, {img: p.imgs[0], icon: p.icon});
+    window.agregarAlCarrito(p.name, p.price, p.categoriaCarrito, talla, cantidad, p.tallas, {img: p.imgs[0], icon: p.icon}, p.id);
 
     // Confirmación en el mismo botón; la cantidad vuelve a 1 para el siguiente
     const texto = dialogo.querySelector(".pv-add-text");

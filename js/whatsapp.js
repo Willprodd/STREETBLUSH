@@ -6,7 +6,7 @@
   "use strict";
 
   // ======= CONFIG — reemplaza con los datos reales del negocio =======
-  const WHATSAPP_NUMBER = "573000000000"; // <-- EDITAR: número real en formato 57XXXXXXXXXX
+  const WHATSAPP_NUMBER = "573124841380";
   const GENERAL_MSG = "Hola Street Blush! Quiero saber más sobre sus productos.";
 
   const waLink = (text) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
